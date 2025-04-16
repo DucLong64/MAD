@@ -2,7 +2,6 @@ package com.jobfinder.job_finder.repository;
 
 import com.jobfinder.job_finder.entity.JobPosting;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
 import java.util.*;
 

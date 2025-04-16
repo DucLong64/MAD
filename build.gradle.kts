@@ -22,7 +22,7 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-security")
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("mysql:mysql-connector-java:8.0.33")  // Kết nối với MySQL
-
+	implementation("org.springframework.boot:spring-boot-starter-validation:3.4.3") // xác thực dữ liệu đầu vào
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.springframework.security:spring-security-test")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
