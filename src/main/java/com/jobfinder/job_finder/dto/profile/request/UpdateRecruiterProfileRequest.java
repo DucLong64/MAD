@@ -1,78 +1,44 @@
 package com.jobfinder.job_finder.dto.profile.request;
 
-public class UpdateRecruiterProfileRequest implements ProfileRequest {
+import org.hibernate.validator.constraints.URL;
+
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+import lombok.Getter;
+import lombok.Setter;
+
+@Setter
+@Getter
+public class UpdateRecruiterProfileRequest {
+
+    @NotBlank(message = "Phải có tên công ty.")
+    @Size(min = 2, max = 100, message = "Tên công ty phải có ít nhất 2 ký tự.")
     private String companyName;
 
+    @NotBlank(message = "Hãy cho mình biết số điện thoại nhé!")
+    @Pattern(regexp = "^(?:\\+\\d{1,3}[- ]?)?\\d{10}$", message = "Số điện thoại không hợp lệ.")
     private String contactPhoneNumber;
+
+    @NotBlank(message = "Hãy cho tôi biết email của bạn!")
+    @Email(message = "Email không hợp lệ rồi thằng ngu.")
     private String contactEmail;
+
+    @URL(message = "Có thật là mày đưa tao ảnh không")
     private String companyLogoUrl;
+
+    @NotBlank(message = "Điền cái địa chỉ vào.")
+    @Size(max = 255, message = "Mày ở đâu mà địa chỉ dài vậy.")
     private String companyAddress;
+
+    @Size(max = 500, message = "Mày mô tả công ty gì mà dài vậy đa cấp à.")
     private String companyDescription;
+
+    @Size(max = 100, message = "đa cấp à mà lắm lĩnh vực vậy.")
     private String companyOperationField;
+
+    @URL(message = "Mày đưa tao địa chỉ web lừa đảo à, đổi lại!")
     private String companyWebsite;
     
-    // Getters and Setters
-    public String getCompanyName() {
-        return companyName;
-    }
-
-    public void setCompanyName(String companyName) {
-        this.companyName = companyName;
-    }
-
-    public String getCompanyDescription() {
-        return companyDescription;
-    }
-
-    public void setCompanyDescription(String companyDescription) {
-        this.companyDescription = companyDescription;
-    }
-
-    public String getCompanyWebsite() {
-        return companyWebsite;
-    }
-
-    public void setCompanyWebsite(String companyWebsite) {
-        this.companyWebsite = companyWebsite;
-    }
-
-    public String getContactEmail() {
-        return contactEmail;
-    }
-
-    public void setContactEmail(String contactEmail) {
-        this.contactEmail = contactEmail;
-    }
-
-    public String getContactPhoneNumber() {
-        return contactPhoneNumber;
-    }
-
-    public void setContactPhoneNumber(String contactPhoneNumber) {
-        this.contactPhoneNumber = contactPhoneNumber;
-    }
-
-    public String getCompanyLogoUrl() {
-        return companyLogoUrl;
-    }
-
-    public void setCompanyLogoUrl(String companyLogoUrl) {
-        this.companyLogoUrl = companyLogoUrl;
-    }
-
-    public String getCompanyAddress() {
-        return companyAddress;
-    }
-
-    public void setCompanyAddress(String companyAddress) {
-        this.companyAddress = companyAddress;
-    }
-
-    public String getCompanyOperationField() {
-        return companyOperationField;
-    }
-
-    public void setCompanyOperationField(String companyOperationField) {
-        this.companyOperationField = companyOperationField;
-    }
 }

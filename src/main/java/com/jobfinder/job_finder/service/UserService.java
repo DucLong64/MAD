@@ -3,9 +3,10 @@ package com.jobfinder.job_finder.service;
 import com.jobfinder.job_finder.dto.UserDTO;
 import com.jobfinder.job_finder.entity.JobSeeker;
 import com.jobfinder.job_finder.entity.Recruiter;
-import com.jobfinder.job_finder.entity.Role;
 import com.jobfinder.job_finder.entity.User;
 import com.jobfinder.job_finder.repository.UserRepository;
+import com.jobfinder.job_finder.util.Role;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -90,6 +91,10 @@ public class UserService {
     // Lấy tất cả hồ sơ người dùng
     public List<User> getAllUserProfiles() {
         return userRepository.findAll();  // Lấy tất cả người dùng
+    }
+
+    public Role getUserRole(Long userId) {
+        return userRepository.findById(userId).get().getRole();  // Lấy vai trò của người dùng
     }
 
 }

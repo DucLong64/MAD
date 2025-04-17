@@ -1,5 +1,7 @@
 package com.jobfinder.job_finder.entity.profile;
 
+import java.util.Date;
+
 import jakarta.persistence.Entity;
 import lombok.Getter;
 import lombok.Setter;
@@ -8,11 +10,10 @@ import lombok.Setter;
 @Setter
 @Entity
 // hồ sơ người tìm việcviệc
-public class JobSeekerProfile {
+public class JobSeekerProfile extends Profile{
 
-    private String dob;  
+    private Date dob;  
     private String gender;
-    private String attribute;
     private String education;
     private String pathCV;
     private String language;
