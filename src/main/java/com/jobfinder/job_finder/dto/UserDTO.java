@@ -1,7 +1,8 @@
 package com.jobfinder.job_finder.dto;
 
-import com.jobfinder.job_finder.entity.Role;
 import java.util.List;
+
+import com.jobfinder.job_finder.util.Role;
 
 public class UserDTO {
     private String fullName;

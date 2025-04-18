@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import java.util.HashSet;
 import java.util.List;
 
+import com.jobfinder.job_finder.util.Role;
+
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE) // Hoặc sử dụng InheritanceType.JOINED nếu muốn các bảng riêng biệt
 @DiscriminatorColumn(name = "user_type", discriminatorType = DiscriminatorType.STRING) // Cột phân biệt loại người dùng
