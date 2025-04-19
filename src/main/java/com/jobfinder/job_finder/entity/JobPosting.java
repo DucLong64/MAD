@@ -3,6 +3,7 @@ package com.jobfinder.job_finder.entity;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 public class JobPosting {
@@ -11,15 +12,19 @@ public class JobPosting {
     private Long id;
     private String title;
     private String description;
-    private String companyName;
     private String location;
     private LocalDateTime postDate;
     private String contactEmail;
     private boolean isActive;
+    private Long numberOfPositions;
+    private LocalDateTime deadLine;
 
     @ManyToOne
     @JoinColumn(name="recruiter_id", referencedColumnName = "id")
     private User recruiter;
+
+    @OneToMany(mappedBy = "jobPosting", cascade = CascadeType.ALL)
+    private List<Shift> shifts;
 
     public Long getId() {
         return id;
@@ -43,14 +48,6 @@ public class JobPosting {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public String getCompanyName() {
-        return companyName;
-    }
-
-    public void setCompanyName(String companyName) {
-        this.companyName = companyName;
     }
 
     public String getLocation() {
@@ -91,5 +88,29 @@ public class JobPosting {
 
     public void setRecruiter(User recruiter) {
         this.recruiter = recruiter;
+    }
+
+    public Long getNumberOfPositions() {
+        return numberOfPositions;
+    }
+
+    public void setNumberOfPositions(Long numberOfPositions) {
+        this.numberOfPositions = numberOfPositions;
+    }
+
+    public LocalDateTime getDeadLine() {
+        return deadLine;
+    }
+
+    public void setDeadLine(LocalDateTime deadLine) {
+        this.deadLine = deadLine;
+    }
+
+    public List<Shift> getShifts() {
+        return shifts;
+    }
+
+    public void setShifts(List<Shift> shifts) {
+        this.shifts = shifts;
     }
 }

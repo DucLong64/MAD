@@ -1,12 +1,17 @@
 package com.jobfinder.job_finder.service;
 
+import com.jobfinder.job_finder.dto.ApiResponseLogin;
+import com.jobfinder.job_finder.dto.ApiResponseRegister;
 import com.jobfinder.job_finder.dto.UserDTO;
+import com.jobfinder.job_finder.dto.UserDTOResponse;
 import com.jobfinder.job_finder.entity.JobSeeker;
 import com.jobfinder.job_finder.entity.Recruiter;
-import com.jobfinder.job_finder.entity.Role;
+import com.jobfinder.job_finder.util.JwtUtil;
+import com.jobfinder.job_finder.util.Role;
 import com.jobfinder.job_finder.entity.User;
 import com.jobfinder.job_finder.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -14,14 +19,15 @@ import java.util.List;
 
 @Service
 public class UserService {
-
+    @Autowired
+    private JwtUtil jwtUtil;
     @Autowired
     private UserRepository userRepository;
 
     // Đăng ký người dùng
-    public User registerUser(UserDTO userDTO) {
+    public ApiResponseRegister registerUser(UserDTO userDTO) {
         if (userRepository.findByEmail(userDTO.getEmail()).isPresent()) {
-            throw new RuntimeException("Email already in use");
+            return new ApiResponseRegister("Email already in use", false, HttpStatus.BAD_REQUEST.value());  // Trả về lỗi nếu email đã tồn tại
         }
         User user = new User();
         // Đăng ký theo vai trò
@@ -35,11 +41,12 @@ public class UserService {
         user.setEmail(userDTO.getEmail());
         user.setPassword(new BCryptPasswordEncoder().encode(userDTO.getPassword()));  // Mã hóa mật khẩu
         user.setRole(userDTO.getRole());
-        return userRepository.save(user);
+        userRepository.save(user);
+        return new ApiResponseRegister("User registered successfully", true, HttpStatus.CREATED.value());  // Thông báo thành công
     }
 
     // Đăng nhập người dùng
-    public User loginUser(String email, String password) {
+    public ApiResponseLogin loginUser(String email, String password) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
@@ -47,7 +54,13 @@ public class UserService {
             throw new RuntimeException("Invalid credentials");
         }
 
-        return user;
+        String token= jwtUtil.generateToken(user.getEmail());
+        UserDTOResponse userDTOResponse= new UserDTOResponse(user.getId()
+                                                    ,user.getFullName()
+                                                    ,user.getEmail()
+                                                    ,user.getRole().toString()
+                                                    ,token);
+        return new ApiResponseLogin("success", "Login successful", userDTOResponse);
     }
     // Cập nhật hồ sơ người dùng
     public User updateProfile(Long userId, UserDTO userDTO) {

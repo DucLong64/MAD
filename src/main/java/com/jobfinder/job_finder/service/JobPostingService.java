@@ -1,10 +1,15 @@
 package com.jobfinder.job_finder.service;
 
+import com.jobfinder.job_finder.converter.JobPostingDTOConverter;
+import com.jobfinder.job_finder.dto.JobPostingDTO;
 import com.jobfinder.job_finder.entity.JobPosting;
+import com.jobfinder.job_finder.entity.Shift;
 import com.jobfinder.job_finder.repository.JobPostingRepository;
+import com.jobfinder.job_finder.repository.ShiftRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,14 +17,33 @@ import java.util.Optional;
 public class JobPostingService {
     @Autowired
     private JobPostingRepository jobPostingRepository;
-    public JobPosting createJobPosting(JobPosting jobPosting) {
+    @Autowired
+    private ShiftRepository shiftRepository;
+    @Autowired
+    private JobPostingDTOConverter jobPostingDTOConverter;
+
+    public JobPostingDTO createJobPosting(JobPosting jobPosting, List<Shift> shifts) {
         jobPosting.setPostDate(java.time.LocalDateTime.now());
         jobPosting.setActive(true);
-        return (JobPosting) jobPostingRepository.save(jobPosting);
+        JobPosting savedJobPosting = jobPostingRepository.save(jobPosting);
+
+        if( shifts != null && !shifts.isEmpty()) {
+            for(Shift shift : shifts) {
+                shift.setJobPosting(savedJobPosting);
+                shiftRepository.save(shift);
+            }
+        }
+        return jobPostingDTOConverter.toJobPostingDTO(savedJobPosting);
     }
     // Tìm kiếm tin tuyển dụng của nhà tuyển dụng
-    public List<JobPosting> getJobPostings(Long recruiterId) {
-        return jobPostingRepository.findByRecruiterId(recruiterId);
+    public List<JobPostingDTO> getJobPostings(Long recruiterId) {
+        List<JobPosting> jobPostings = jobPostingRepository.findByRecruiterId(recruiterId);
+        List<JobPostingDTO> jobPostingDTOS= new ArrayList<>();
+        for(JobPosting jobPosting : jobPostings) {
+            JobPostingDTO jobDTO = jobPostingDTOConverter.toJobPostingDTO(jobPosting);
+            jobPostingDTOS.add(jobDTO);
+        }
+        return jobPostingDTOS;
     }
     // Cập nhật tin tuyển dụng
     public JobPosting updateJobPosting(Long jobId, Long recruiterId, JobPosting jobPosting) {
@@ -47,11 +71,23 @@ public class JobPostingService {
         }
     }
     // Lấy tất cả các tin tuyển dụng của tất cả nhà tuyển dụng
-    public List<JobPosting> getAllJobPostings() {
-        return jobPostingRepository.findAll();  // Trả về tất cả các tin tuyển dụng
+    public List<JobPostingDTO> getAllJobPostings() {
+        List<JobPosting> jobPostings = jobPostingRepository.findAll();
+        List<JobPostingDTO> jobPostingDTOS= new ArrayList<>();
+        for(JobPosting jobPosting : jobPostings) {
+            JobPostingDTO jobDTO = jobPostingDTOConverter.toJobPostingDTO(jobPosting);
+            jobPostingDTOS.add(jobDTO);
+        }
+        return jobPostingDTOS;
     }
-    public List<JobPosting> getAllJobPostingsAndActiveTure() {
-        return jobPostingRepository.findByisActiveTrue();  // Trả về tất cả các tin tuyển dụng
+    public List<JobPostingDTO> getAllJobPostingsAndActiveTure() {
+        List<JobPosting> jobPostings = jobPostingRepository.findByisActiveTrue();
+        List<JobPostingDTO> jobPostingDTOS= new ArrayList<>();
+        for(JobPosting jobPosting : jobPostings) {
+            JobPostingDTO jobDTO = jobPostingDTOConverter.toJobPostingDTO(jobPosting);
+            jobPostingDTOS.add(jobDTO);
+        }
+        return jobPostingDTOS;
     }
 
 }

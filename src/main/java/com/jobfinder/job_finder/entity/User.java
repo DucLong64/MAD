@@ -1,9 +1,7 @@
 package com.jobfinder.job_finder.entity;
 
+import com.jobfinder.job_finder.util.Role;
 import jakarta.persistence.*;
-
-import java.util.HashSet;
-import java.util.List;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE) // Hoặc sử dụng InheritanceType.JOINED nếu muốn các bảng riêng biệt
