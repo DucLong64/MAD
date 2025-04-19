@@ -1,9 +1,6 @@
 package com.jobfinder.job_finder.service;
 
-import com.jobfinder.job_finder.dto.ApiResponseLogin;
-import com.jobfinder.job_finder.dto.ApiResponseRegister;
-import com.jobfinder.job_finder.dto.UserDTO;
-import com.jobfinder.job_finder.dto.UserDTOResponse;
+import com.jobfinder.job_finder.dto.*;
 import com.jobfinder.job_finder.entity.JobSeeker;
 import com.jobfinder.job_finder.entity.Recruiter;
 import com.jobfinder.job_finder.util.JwtUtil;
@@ -25,22 +22,22 @@ public class UserService {
     private UserRepository userRepository;
 
     // Đăng ký người dùng
-    public ApiResponseRegister registerUser(UserDTO userDTO) {
-        if (userRepository.findByEmail(userDTO.getEmail()).isPresent()) {
+    public ApiResponseRegister registerUser(DtoLogin dtoLogin) {
+        if (userRepository.findByEmail(dtoLogin.getEmail()).isPresent()) {
             return new ApiResponseRegister("Email already in use", false, HttpStatus.BAD_REQUEST.value());  // Trả về lỗi nếu email đã tồn tại
         }
         User user = new User();
         // Đăng ký theo vai trò
-        if (userDTO.getRole() == Role.JOB_SEEKER) {
+        if (dtoLogin.getRole() == Role.JOB_SEEKER) {
             user = new JobSeeker();  // Tạo JobSeeker cho người tìm việc
-        } else if (userDTO.getRole() == Role.RECRUITER) {
+        } else if (dtoLogin.getRole() == Role.RECRUITER) {
             user = new Recruiter();  // Tạo Recruiter cho nhà tuyển dụng
         }
 
-        user.setFullName(userDTO.getFullName());
-        user.setEmail(userDTO.getEmail());
-        user.setPassword(new BCryptPasswordEncoder().encode(userDTO.getPassword()));  // Mã hóa mật khẩu
-        user.setRole(userDTO.getRole());
+        user.setFullName(dtoLogin.getFullName());
+        user.setEmail(dtoLogin.getEmail());
+        user.setPassword(new BCryptPasswordEncoder().encode(dtoLogin.getPassword()));  // Mã hóa mật khẩu
+        user.setRole(dtoLogin.getRole());
         userRepository.save(user);
         return new ApiResponseRegister("User registered successfully", true, HttpStatus.CREATED.value());  // Thông báo thành công
     }

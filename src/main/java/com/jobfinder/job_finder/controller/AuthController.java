@@ -2,6 +2,7 @@ package com.jobfinder.job_finder.controller;
 
 import com.jobfinder.job_finder.dto.ApiResponseLogin;
 import com.jobfinder.job_finder.dto.ApiResponseRegister;
+import com.jobfinder.job_finder.dto.DtoLogin;
 import com.jobfinder.job_finder.dto.UserDTO;
 import com.jobfinder.job_finder.entity.User;
 import com.jobfinder.job_finder.service.UserService;
@@ -22,8 +23,8 @@ public class AuthController {
 
     // Đăng ký
     @PostMapping("/register")
-    public ResponseEntity<ApiResponseRegister> register(@RequestBody UserDTO userDTO) {
-        ApiResponseRegister response = userService.registerUser(userDTO);
+    public ResponseEntity<ApiResponseRegister> register(@RequestBody DtoLogin dtoLogin) {
+        ApiResponseRegister response = userService.registerUser(dtoLogin);
 
         // Nếu đăng ký thành công, trả về HTTP status 201 (Created) và thông báo
         if (response.isSuccess()) {
