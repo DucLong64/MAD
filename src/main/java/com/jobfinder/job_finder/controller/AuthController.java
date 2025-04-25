@@ -1,9 +1,6 @@
 package com.jobfinder.job_finder.controller;
 
-import com.jobfinder.job_finder.dto.ApiResponseLogin;
-import com.jobfinder.job_finder.dto.ApiResponseRegister;
-import com.jobfinder.job_finder.dto.DtoLogin;
-import com.jobfinder.job_finder.dto.UserDTO;
+import com.jobfinder.job_finder.dto.*;
 import com.jobfinder.job_finder.entity.User;
 import com.jobfinder.job_finder.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,25 +20,16 @@ public class AuthController {
 
     // Đăng ký
     @PostMapping("/register")
-    public ResponseEntity<ApiResponseRegister> register(@RequestBody DtoLogin dtoLogin) {
-        ApiResponseRegister response = userService.registerUser(dtoLogin);
-
-        // Nếu đăng ký thành công, trả về HTTP status 201 (Created) và thông báo
-        if (response.isSuccess()) {
-            return ResponseEntity.status(HttpStatus.CREATED)
-                    .body(new ApiResponseRegister(response.getMessage(), response.isSuccess(), response.getStatusCode()));
-        } else {
-            // Nếu có lỗi, trả về HTTP status 400 (Bad Request) và thông báo lỗi
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(new ApiResponseRegister(response.getMessage(), response.isSuccess(), response.getStatusCode()));
-        }
+    public ResponseEntity<ApiResponseRegister> register(@RequestBody DtoRegister dtoRegister) {
+        ApiResponseRegister response = userService.registerUser(dtoRegister);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     // Đăng nhập
     @PostMapping("/login")
-    public ResponseEntity<ApiResponseLogin> login(@RequestParam String email, @RequestParam String password) {
+    public ResponseEntity<ApiResponseLogin> login(@RequestBody UserLogin userLogin) {
         try {
-            ApiResponseLogin response= userService.loginUser(email, password);
+            ApiResponseLogin response= userService.loginUser(userLogin);
             return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON)
                     .body(response);
         } catch (Exception e) {

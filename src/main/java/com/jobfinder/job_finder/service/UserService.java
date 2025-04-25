@@ -22,32 +22,32 @@ public class UserService {
     private UserRepository userRepository;
 
     // Đăng ký người dùng
-    public ApiResponseRegister registerUser(DtoLogin dtoLogin) {
-        if (userRepository.findByEmail(dtoLogin.getEmail()).isPresent()) {
+    public ApiResponseRegister registerUser(DtoRegister dtoRegister) {
+        if (userRepository.findByEmail(dtoRegister.getEmail()).isPresent()) {
             return new ApiResponseRegister("Email already in use", false, HttpStatus.BAD_REQUEST.value());  // Trả về lỗi nếu email đã tồn tại
         }
         User user = new User();
         // Đăng ký theo vai trò
-        if (dtoLogin.getRole() == Role.JOB_SEEKER) {
+        if (dtoRegister.getRole() == Role.JOB_SEEKER) {
             user = new JobSeeker();  // Tạo JobSeeker cho người tìm việc
-        } else if (dtoLogin.getRole() == Role.RECRUITER) {
+        } else if (dtoRegister.getRole() == Role.RECRUITER) {
             user = new Recruiter();  // Tạo Recruiter cho nhà tuyển dụng
         }
 
-        user.setFullName(dtoLogin.getFullName());
-        user.setEmail(dtoLogin.getEmail());
-        user.setPassword(new BCryptPasswordEncoder().encode(dtoLogin.getPassword()));  // Mã hóa mật khẩu
-        user.setRole(dtoLogin.getRole());
+        user.setFullName(dtoRegister.getFullName());
+        user.setEmail(dtoRegister.getEmail());
+        user.setPassword(new BCryptPasswordEncoder().encode(dtoRegister.getPassword()));  // Mã hóa mật khẩu
+        user.setRole(dtoRegister.getRole());
         userRepository.save(user);
         return new ApiResponseRegister("User registered successfully", true, HttpStatus.CREATED.value());  // Thông báo thành công
     }
 
     // Đăng nhập người dùng
-    public ApiResponseLogin loginUser(String email, String password) {
-        User user = userRepository.findByEmail(email)
+    public ApiResponseLogin loginUser(UserLogin userLogin) {
+        User user = userRepository.findByEmail(userLogin.getEmail())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        if (!new BCryptPasswordEncoder().matches(password, user.getPassword())) {
+        if (!new BCryptPasswordEncoder().matches(userLogin.getPassword(), user.getPassword())) {
             throw new RuntimeException("Invalid credentials");
         }
 

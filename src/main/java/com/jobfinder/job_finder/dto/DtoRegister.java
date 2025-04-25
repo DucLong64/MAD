@@ -2,7 +2,7 @@ package com.jobfinder.job_finder.dto;
 
 import com.jobfinder.job_finder.util.Role;
 
-public class DtoLogin {
+public class DtoRegister {
     private String fullName;
     private String email;
     private String password;
