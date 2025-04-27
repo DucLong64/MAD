@@ -1,6 +1,7 @@
 package com.jobfinder.job_finder.dto;
 
 public class JobPostingDTO {
+    private Long id;
     private String title;
     private String description;
     private String location;
@@ -9,6 +10,14 @@ public class JobPostingDTO {
     private String deadLine;
     private String recruiter;  // DTO cho recruiter
     private String shifts;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getTitle() {
         return title;

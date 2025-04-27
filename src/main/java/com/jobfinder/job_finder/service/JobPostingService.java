@@ -6,6 +6,7 @@ import com.jobfinder.job_finder.entity.JobPosting;
 import com.jobfinder.job_finder.entity.Shift;
 import com.jobfinder.job_finder.repository.JobPostingRepository;
 import com.jobfinder.job_finder.repository.ShiftRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,8 +22,11 @@ public class JobPostingService {
     private ShiftRepository shiftRepository;
     @Autowired
     private JobPostingDTOConverter jobPostingDTOConverter;
+    @Autowired
+    private ShiftService shiftService;
 
-    public JobPostingDTO createJobPosting(JobPosting jobPosting, List<Shift> shifts) {
+    public JobPostingDTO createJobPosting(JobPosting jobPosting) {
+        List<Shift> shifts = jobPosting.getShifts();
         jobPosting.setPostDate(java.time.LocalDateTime.now());
         jobPosting.setActive(true);
         JobPosting savedJobPosting = jobPostingRepository.save(jobPosting);
@@ -46,15 +50,32 @@ public class JobPostingService {
         return jobPostingDTOS;
     }
     // Cập nhật tin tuyển dụng
-    public JobPosting updateJobPosting(Long jobId, Long recruiterId, JobPosting jobPosting) {
-        Optional<JobPosting> existingJob = jobPostingRepository.findByIdAndRecruiterId(jobId, recruiterId);
+    public JobPostingDTO updateJobPosting(Long jobId, JobPosting jobPosting) {
+        Optional<JobPosting> existingJob = jobPostingRepository.findById(jobId);
         if (existingJob.isPresent()) {
             JobPosting updatedJob = existingJob.get();
             updatedJob.setTitle(jobPosting.getTitle());
             updatedJob.setDescription(jobPosting.getDescription());
+            updatedJob.setContactEmail(jobPosting.getContactEmail());
             updatedJob.setLocation(jobPosting.getLocation());
             updatedJob.setContactEmail(jobPosting.getContactEmail());
-            return (JobPosting) jobPostingRepository.save(updatedJob);
+            updatedJob.setNumberOfPositions(jobPosting.getNumberOfPositions());
+            updatedJob.setDeadLine(jobPosting.getDeadLine());
+
+            List<Shift> shifts = jobPosting.getShifts();
+
+            // Xóa các ca làm việc cũ liên quan đến tin tuyển dụng này (nếu có) và thêm ca làm việc mới
+            shiftService.deleteAllShiftsByJobId(jobId);
+
+            if (shifts != null && !shifts.isEmpty()) {
+                for (Shift shift : shifts) {
+                    shift.setJobPosting(updatedJob);
+                    shiftRepository.save(shift); // Thêm các ca làm việc mới
+                }
+            }
+            // Lưu lại thông tin tin tuyển dụng đã cập nhật
+            jobPostingRepository.save(updatedJob);
+            return jobPostingDTOConverter.toJobPostingDTO(updatedJob);
         } else {
             throw new RuntimeException("Job posting not found or does not belong to this recruiter");
         }
@@ -88,6 +109,10 @@ public class JobPostingService {
             jobPostingDTOS.add(jobDTO);
         }
         return jobPostingDTOS;
+    }
+    public JobPosting getJobPostingById(Long jobPostingId) {
+        return jobPostingRepository.findById(jobPostingId)
+                .orElseThrow(() -> new EntityNotFoundException("JobPosting not found with id: " + jobPostingId));
     }
 
 }

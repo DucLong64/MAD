@@ -37,7 +37,7 @@ public class JobPostingController {
             }
             jobPosting.setRecruiter(recruiter);
             // Tạo job tuyển dụng mới
-            JobPostingDTO createdJob = jobPostingService.createJobPosting(jobPosting, jobPosting.getShifts());
+            JobPostingDTO createdJob = jobPostingService.createJobPosting(jobPosting);
             // Tạo phản hồi thành công
             response.put("status", "success");
             response.put("message", "Job posted successfully.");
@@ -60,9 +60,29 @@ public class JobPostingController {
 
     // Cập nhật tin tuyển dụng
     @PutMapping("/update-job/{jobId}")
-    public ResponseEntity<JobPosting> updateJob(@PathVariable Long jobId, @RequestParam Long recruiterId, @RequestBody JobPosting jobPosting) {
-        JobPosting updatedJob = jobPostingService.updateJobPosting(jobId, recruiterId, jobPosting);
-        return ResponseEntity.ok(updatedJob);
+    public ResponseEntity<Map<String, Object>> updateJob(@PathVariable Long jobId, @RequestBody JobPosting jobPosting) {
+
+        Map<String, Object> response = new HashMap<>();
+        try {
+            // Tìm kiếm tin tuyển dụng cần cập nhật
+            JobPostingDTO existingJob = jobPostingService.updateJobPosting(jobId, jobPosting);
+            if (existingJob == null) {
+                response.put("status", "error");
+                response.put("message", "Job posting not found or does not belong to this recruiter.");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+            }
+
+            // Tạo phản hồi thành công
+            response.put("status", "success");
+            response.put("message", "Job updated successfully.");
+            response.put("job", existingJob);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            // Xử lý ngoại lệ nếu có lỗi xảy ra
+            response.put("status", "error");
+            response.put("message", "An error occurred while updating the job: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
     }
 
     // Hủy tin tuyển dụng
@@ -77,6 +97,7 @@ public class JobPostingController {
         List<JobPostingDTO> jobPostings = jobPostingService.getAllJobPostings();
         return ResponseEntity.ok(jobPostings);
     }
+    // Lay tat ca cac tin con han
     @GetMapping("/jobs")
     public ResponseEntity<List<JobPostingDTO>> getActiveJobPostings() {
         List<JobPostingDTO> jobs = jobPostingService.getAllJobPostingsAndActiveTure();
