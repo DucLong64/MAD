@@ -2,9 +2,6 @@ package com.jobfinder.job_finder.entity;
 
 import jakarta.persistence.*;
 
-import java.util.HashSet;
-import java.util.List;
-
 import com.jobfinder.job_finder.util.Role;
 
 @Entity
@@ -60,5 +57,10 @@ public class User {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public User orElseThrow(Object object) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'orElseThrow'");
     }
 }

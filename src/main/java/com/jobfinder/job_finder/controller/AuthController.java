@@ -1,14 +1,17 @@
 package com.jobfinder.job_finder.controller;
 
+import com.jobfinder.job_finder.dto.LoginRequest;
 import com.jobfinder.job_finder.dto.UserDTO;
 import com.jobfinder.job_finder.entity.User;
 import com.jobfinder.job_finder.service.UserService;
+
+import jakarta.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping("/auth")
@@ -26,28 +29,8 @@ public class AuthController {
 
     // Đăng nhập
     @PostMapping("/login")
-    public ResponseEntity<User> login(@RequestParam String email, @RequestParam String password) {
-        User user = userService.loginUser(email, password);
+    public ResponseEntity<User> login(@RequestBody @Valid LoginRequest loginRequest) {
+        User user = userService.loginUser(loginRequest.getUsername(), loginRequest.getPassword());
         return ResponseEntity.ok(user);
     }
-
-    // Cập nhật hồ sơ
-    @PutMapping("/profile/{userId}")
-    public ResponseEntity<User> updateProfile(@PathVariable Long userId, @RequestBody UserDTO userDTO) {
-        User updatedUser = userService.updateProfile(userId, userDTO);
-        return ResponseEntity.ok(updatedUser);
-    }
-    // Xem hồ sơ người dùng
-    @GetMapping("/profile/{userId}")
-    public ResponseEntity<User> getUserProfile(@PathVariable Long userId) {
-        User user = userService.getUserProfile(userId);
-        return ResponseEntity.ok(user);
-    }
-    // Lấy tất cả hồ sơ người dùng
-    @GetMapping("/profile")
-    public ResponseEntity<List<User>> getAllUserProfiles() {
-        List<User> users = userService.getAllUserProfiles();
-        return ResponseEntity.ok(users);
-    }
-
 }

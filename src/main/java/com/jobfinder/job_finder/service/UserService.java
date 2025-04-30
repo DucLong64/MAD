@@ -40,8 +40,8 @@ public class UserService {
     }
 
     // Đăng nhập người dùng
-    public User loginUser(String email, String password) {
-        User user = userRepository.findByEmail(email)
+    public User loginUser(String username, String password) {
+        User user = userRepository.findByEmail(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         if (!new BCryptPasswordEncoder().matches(password, user.getPassword())) {
