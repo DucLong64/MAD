@@ -1,4 +1,4 @@
-package com.jobfinder.job_finder.repository;
+package com.jobfinder.job_finder.repository.job;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
