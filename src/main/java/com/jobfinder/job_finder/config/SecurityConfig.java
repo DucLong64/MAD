@@ -26,7 +26,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthenticationFilter jwtAuthenticationFilter) throws Exception {
         return http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/auth/**","/recruiter/**","/swagger-ui.html", "/v3/api-docs/**", "/swagger-ui/**").permitAll() // với endpoint thì sẽ được cho qua
+                        .requestMatchers("/auth/**","/recruiter/**","/swagger-ui.html", "/v3/api-docs/**", "/swagger-ui/**","/applications/**").permitAll() // với endpoint thì sẽ được cho qua
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
