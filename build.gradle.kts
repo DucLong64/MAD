@@ -27,6 +27,9 @@ dependencies {
 	testImplementation("org.springframework.security:spring-security-test")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 	compileOnly("org.projectlombok:lombok:1.18.34")// hỗ trợ tạp entity
+	annotationProcessor("org.projectlombok:lombok:1.18.30")
+    testCompileOnly("org.projectlombok:lombok:1.18.30")
+    testAnnotationProcessor("org.projectlombok:lombok:1.18.30")
 }
 
 tasks.withType<Test> {

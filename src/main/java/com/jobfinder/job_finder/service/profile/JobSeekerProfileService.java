@@ -46,7 +46,7 @@ public class JobSeekerProfileService {
 
     //cập nhật hồ sơ
     public JobSeekerProfile updateProfile(Long jobSeekerID, UpdateJobSeekerProfileRequest request) {
-        JobSeekerProfile jobSeekerProfile = jobSeekerProfileRepository.findByJobSeekerId(jobSeekerID)
+        JobSeekerProfile jobSeekerProfile = jobSeekerProfileRepository.findByUserId(jobSeekerID)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy hồ sơ"));
         jobSeekerProfile.setName(request.getFullName());
         jobSeekerProfile.setSdt(request.getPhoneNumber());
@@ -64,7 +64,7 @@ public class JobSeekerProfileService {
 
     // lấy hồ sơ
     public JobSeekerProfile getProfile(Long jobseekerId) {
-        return jobSeekerProfileRepository.findByJobSeekerId(jobseekerId)
+        return jobSeekerProfileRepository.findByUserId(jobseekerId)
         .orElseThrow(() -> new RuntimeException("Không tìm thấy hồ sơ"));
     }
 

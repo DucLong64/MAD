@@ -60,7 +60,7 @@ public class JobService {
 
     // Lấy danh sách tất cả các tin tuyển dụng với các thông tin cần thiết
     public List<RespondGetListJobForSeeker> getAllJobPostings() {
-        return jobRepository.getAllJobPostingsForSeeker();  // Trả về tất cả các tin tuyển dụng
+        return jobRepository.getAllJobPostingsForSeeker(JobStatus.OPEN);  // Trả về tất cả các tin tuyển dụng
     }
 
     // Cập nhật tin tuyển dụng
@@ -108,8 +108,5 @@ public class JobService {
     //     return jobPostingRepository.findAll();  // Trả về tất cả các tin tuyển dụng
     // }
     
-    // public List<JobPosting> getAllJobPostingsAndActiveTure() {
-    //     return jobPostingRepository.findByisActiveTrue();  // Trả về tất cả các tin tuyển dụng
-    // }
 
 }

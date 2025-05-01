@@ -45,7 +45,7 @@ public class RecruiterProfileService {
 
     // cập nhật hồ sơ nhà tuyển dụng
     public RecruiterProfile updateProfile(Long recruiterID, UpdateRecruiterProfileRequest request) {
-        RecruiterProfile recruiterProfile = recruiterProfileRepository.findByRecruiterId(recruiterID)
+        RecruiterProfile recruiterProfile = recruiterProfileRepository.findByUserId(recruiterID)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy hồ sơ"));
         recruiterProfile.setName(request.getCompanyName());
         recruiterProfile.setSdt(request.getContactPhoneNumber());
@@ -60,7 +60,7 @@ public class RecruiterProfileService {
     }
 
     public RecruiterProfile getProfile(Long recruiterID) {
-        return recruiterProfileRepository.findByRecruiterId(recruiterID)
+        return recruiterProfileRepository.findByUserId(recruiterID)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy hồ sơ"));
     }
 
