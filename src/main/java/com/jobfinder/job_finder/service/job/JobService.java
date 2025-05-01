@@ -8,9 +8,9 @@ import com.jobfinder.job_finder.dto.jobposting.respond.RespondGetListJobForSeeke
 import com.jobfinder.job_finder.entity.User;
 import com.jobfinder.job_finder.entity.job.Job;
 import com.jobfinder.job_finder.entity.job.Shift;
-import com.jobfinder.job_finder.repository.JobRepository;
-import com.jobfinder.job_finder.repository.ShiftRepository;
 import com.jobfinder.job_finder.repository.UserRepository;
+import com.jobfinder.job_finder.repository.job.JobRepository;
+import com.jobfinder.job_finder.repository.job.ShiftRepository;
 import com.jobfinder.job_finder.util.JobStatus;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,7 +60,7 @@ public class JobService {
 
     // Lấy danh sách tất cả các tin tuyển dụng với các thông tin cần thiết
     public List<RespondGetListJobForSeeker> getAllJobPostings() {
-        return jobRepository.getAllJobPostingsForSeeker();  // Trả về tất cả các tin tuyển dụng
+        return jobRepository.getAllJobPostingsForSeeker(JobStatus.OPEN);  // Trả về tất cả các tin tuyển dụng
     }
 
     // Cập nhật tin tuyển dụng
@@ -108,8 +108,5 @@ public class JobService {
     //     return jobPostingRepository.findAll();  // Trả về tất cả các tin tuyển dụng
     // }
     
-    // public List<JobPosting> getAllJobPostingsAndActiveTure() {
-    //     return jobPostingRepository.findByisActiveTrue();  // Trả về tất cả các tin tuyển dụng
-    // }
 
 }
