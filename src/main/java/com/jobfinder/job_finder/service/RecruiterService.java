@@ -1,7 +1,6 @@
 package com.jobfinder.job_finder.service;
 
 import com.jobfinder.job_finder.entity.Recruiter;
-import com.jobfinder.job_finder.repository.JobPostingRepository;
 import com.jobfinder.job_finder.repository.RecruiterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

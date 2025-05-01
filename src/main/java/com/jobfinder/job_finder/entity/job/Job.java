@@ -6,14 +6,16 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 
 import com.jobfinder.job_finder.dto.jobposting.request.CreateJobPostingRequest;
 import com.jobfinder.job_finder.entity.User;
+import com.jobfinder.job_finder.util.JobStatus;
 
 @Getter
 @Setter
 @Entity
-public class JobPosting {
+public class Job {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -36,11 +38,13 @@ public class JobPosting {
     private Integer quantity;
 
     // Ca làm
-    ArrayList<Shift> shifts = new ArrayList<>(); // Danh sách ca làm việc
+    @OneToMany(mappedBy = "job", cascade = CascadeType.ALL, orphanRemoval = true)
+    List<Shift> shifts = new ArrayList<>(); // Danh sách ca làm việc
 
     private LocalDate applicationDeadline; // hạn đăng tuyển
 
-    private boolean isActive; // trạng thái đăng tuyển
+    @Enumerated(EnumType.STRING)
+    private JobStatus isActive; // trạng thái đăng tuyển
     private LocalDate createdAt; // ngày tạo bài đăng
 
     // Mối quan hệ N - 1 với Recruiter
@@ -48,7 +52,7 @@ public class JobPosting {
     @JoinColumn(name = "recruiter_id")
     private User recruiter;
 
-    public JobPosting(CreateJobPostingRequest request) {
+    public Job(CreateJobPostingRequest request) {
         this.title = request.title;
         this.jobDescription = request.jobDescription;
         this.location = request.location;
@@ -57,8 +61,7 @@ public class JobPosting {
         this.benefits = request.benefits;
         this.quantity = request.quantity;
         this.applicationDeadline = request.applicationDeadline;
-        this.shifts = new ArrayList<>(); // Khởi tạo danh sách ca làm việc
-        this.isActive = true; // Mặc định là bài đăng đang hoạt động
+        this.isActive = JobStatus.PENDING; // Mặc định là bài đăng chưa được duyệt
         this.createdAt = LocalDate.now(); // Ngày tạo bài đăng là ngày hiện tại
     }
 }
