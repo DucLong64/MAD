@@ -20,7 +20,7 @@ public interface JobRepository extends JpaRepository<Job, Long> {
                 SELECT jp.id AS id,
                        jp.title AS title,
                        jp.location AS address,
-                       jp.applicationDeadline AS applicationDeadline,
+                       FUNCTION('DATE_FORMAT', jp.applicationDeadline, '%Y-%m-%d') AS applicationDeadline,
                        jp.isActive AS status,
                        jp.quantity AS quantity,
                        COUNT(ss.id) AS appliedCount
@@ -39,7 +39,7 @@ public interface JobRepository extends JpaRepository<Job, Long> {
                        jp.location AS location,
                        jp.salary AS salary,
                        jp.jobDescription AS description,
-                       jp.applicationDeadline AS applicationDeadline
+                       FUNCTION('DATE_FORMAT', jp.applicationDeadline, '%Y-%m-%d') AS applicationDeadline
                 FROM Job jp
                 WHERE jp.isActive = :status
             """)

@@ -21,35 +21,35 @@ public class JobPostingController {
 
     // Lấy danh sách tin tuyển dụng của nhà tuyển dụng
     @GetMapping("/{recruiterID}")
-    public ResponseEntity<List<RespondGetListJobForRecruiter>> getAllJobPostings(@PathVariable Long id) {
-        List<RespondGetListJobForRecruiter> jobs = jobService.getJobForRecruiter(id);
+    public ResponseEntity<List<RespondGetListJobForRecruiter>> getAllJobPostings(@PathVariable Long recruiterID) {
+        List<RespondGetListJobForRecruiter> jobs = jobService.getJobForRecruiter(recruiterID);
         return ResponseEntity.ok(jobs);
     }
 
     // Đăng tin tuyển dụng
     @PostMapping("/{recruiterID}")
-    public ResponseEntity<Job> postJob(@RequestBody CreateJobPostingRequest request, @RequestParam Long recruiterId) {
-        Job createdJob = jobService.createJobPosting(request, recruiterId);
+    public ResponseEntity<Job> postJob(@RequestBody CreateJobPostingRequest request, @PathVariable Long recruiterID) {
+        Job createdJob = jobService.createJobPosting(request, recruiterID);
         return ResponseEntity.ok(createdJob);
     }
 
     // chi tiết công việc
-    @GetMapping("/{jobID}")
-    public ResponseEntity<Job> getJobDetails(@PathVariable Long jobId) {
-        Job jobDetails = jobService.getJobPostings(jobId);
+    @GetMapping("/{recruiterID}/{jobID}")
+    public ResponseEntity<Job> getJobDetails(@PathVariable("jobID") Long jobID) {
+        Job jobDetails = jobService.getJobPostings(jobID);
         return ResponseEntity.ok(jobDetails);
     }
     // Cập nhật tin tuyển dụng
     @PutMapping("/{recruiterID}/{jobID}")
-    public ResponseEntity<Job> updateJob(@PathVariable Long jobId, @RequestParam Long recruiterId, @RequestBody  UpdateJobPostingRequest request) {
-        Job updatedJob = jobService.updateJobPosting(jobId, recruiterId, request);
+    public ResponseEntity<Job> updateJob(@RequestParam Long recruiterID, @PathVariable Long jobID, @RequestBody  UpdateJobPostingRequest request) {
+        Job updatedJob = jobService.updateJobPosting(jobID, recruiterID, request);
         return ResponseEntity.ok(updatedJob);
     }
 
     // Hủy tin tuyển dụng
     @DeleteMapping("/{recruiterID}/{jobID}")
-    public ResponseEntity<Void> deleteJob(@PathVariable Long jobId, @RequestParam Long recruiterId) {
-        jobService.deleteJobPosting(jobId, recruiterId);
+    public ResponseEntity<Void> deleteJob(@RequestParam Long recruiterID, @PathVariable Long jobID) {
+        jobService.deleteJobPosting(jobID, recruiterID);
         return ResponseEntity.noContent().build();
     }
     // // Lay tat ca cac tin

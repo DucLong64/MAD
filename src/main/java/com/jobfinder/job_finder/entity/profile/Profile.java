@@ -1,5 +1,6 @@
 package com.jobfinder.job_finder.entity.profile;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.jobfinder.job_finder.entity.User;
 
 import jakarta.persistence.DiscriminatorColumn;
@@ -34,6 +35,7 @@ public class Profile {
     private String address;
     // 1 user chỉ có 1 profile
     @OneToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 }

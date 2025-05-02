@@ -33,12 +33,12 @@ public class JobSeekerProfileController {
     }
     
     @PutMapping
-    public JobSeekerProfile UpdateProfile(@PathVariable("userID") Long userid, @RequestBody UpdateJobSeekerProfileRequest request) {
+    public JobSeekerProfile UpdateProfile(@PathVariable("userId") Long userid, @RequestBody UpdateJobSeekerProfileRequest request) {
         return jobSeekerProfileService.updateProfile(userid, request);
     }
 
     @GetMapping
-    public JobSeekerProfile GetProfile(@PathVariable("userID") Long userId) {
+    public JobSeekerProfile GetProfile(@PathVariable("userId") Long userId) {
         return jobSeekerProfileService.getProfile(userId);
     }
 }

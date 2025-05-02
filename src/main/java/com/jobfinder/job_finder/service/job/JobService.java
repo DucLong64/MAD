@@ -38,6 +38,11 @@ public class JobService {
     public Job createJobPosting(CreateJobPostingRequest request, Long recruiterId) {
         Job job = new Job(request);
         List<CreateShiftRequest> shifts = request.getShifts();
+
+        User user = userRepository.findById(recruiterId)
+                    .orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng"));
+        job.setRecruiter(user);
+        jobRepository.save(job);
         // Tạo các ca làm việc từ thông tin trong request
         for (CreateShiftRequest shiftRequest : shifts) {
             Shift shift = new Shift();
@@ -47,10 +52,7 @@ public class JobService {
             job.getShifts().add(shift);
             shiftRepository.save(shift); 
         }
-        User user = userRepository.findById(recruiterId)
-                    .orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng"));
-        job.setRecruiter(user);
-        return (Job) jobRepository.save(job);
+        return job;
     }
 
     // Tìm kiếm tin tuyển dụng của nhà tuyển dụng với các thông tin cần thiết

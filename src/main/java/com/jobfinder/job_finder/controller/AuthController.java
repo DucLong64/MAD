@@ -1,7 +1,7 @@
 package com.jobfinder.job_finder.controller;
 
 import com.jobfinder.job_finder.dto.LoginRequest;
-import com.jobfinder.job_finder.dto.UserDTO;
+import com.jobfinder.job_finder.dto.RegisterRequest;
 import com.jobfinder.job_finder.entity.User;
 import com.jobfinder.job_finder.service.UserService;
 
@@ -22,8 +22,8 @@ public class AuthController {
 
     // Đăng ký
     @PostMapping("/register")
-    public ResponseEntity<User> register(@RequestBody UserDTO userDTO) {
-        User registeredUser = userService.registerUser(userDTO);
+    public ResponseEntity<User> register(@RequestBody @Valid RegisterRequest registerRequest) {
+        User registeredUser = userService.registerUser(registerRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(registeredUser);
     }
 

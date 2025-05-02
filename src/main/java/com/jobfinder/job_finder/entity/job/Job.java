@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.jobfinder.job_finder.dto.jobposting.request.CreateJobPostingRequest;
 import com.jobfinder.job_finder.entity.User;
 import com.jobfinder.job_finder.util.JobStatus;
@@ -49,8 +50,12 @@ public class Job {
 
     // Mối quan hệ N - 1 với Recruiter
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
     @JoinColumn(name = "recruiter_id")
     private User recruiter;
+
+    public Job() {
+    }
 
     public Job(CreateJobPostingRequest request) {
         this.title = request.title;

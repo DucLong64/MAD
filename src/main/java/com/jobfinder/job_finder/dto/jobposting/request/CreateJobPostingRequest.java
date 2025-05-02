@@ -24,7 +24,7 @@ public class CreateJobPostingRequest {
     @NotBlank(message = "Lương không được để trống")
     public String salary;
     public String benefits;
-    @NotBlank(message = "Số lượng không được để trống")
+    @NotNull(message = "Số lượng không được để trống")
     public Integer quantity;
     @NotBlank(message = "Hạn đăng tuyển không được để trống")
     @FutureOrPresent(message = "Hạn đăng tuyển phải là ngày hiện tại hoặc tương lai")

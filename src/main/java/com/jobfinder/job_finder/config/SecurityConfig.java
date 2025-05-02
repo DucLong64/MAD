@@ -24,8 +24,8 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/auth/**","/recruiter/**").permitAll() // với endpoint thì sẽ được cho qua
-                        .anyRequest().authenticated()
+                        //.requestMatchers("/auth/**","/recruiter/**").permitAll() // với endpoint thì sẽ được cho qua
+                        .anyRequest().permitAll()//.anyRequest().authenticated()
                 )
                 .formLogin(Customizer.withDefaults())
                 .httpBasic(Customizer.withDefaults())
