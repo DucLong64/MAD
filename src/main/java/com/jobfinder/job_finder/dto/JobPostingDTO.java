@@ -1,13 +1,19 @@
 package com.jobfinder.job_finder.dto;
 
+import java.time.LocalDateTime;
+
 public class JobPostingDTO {
     private Long id;
     private String title;
     private String description;
+    private String requirement;
+    private String salary;
+    private String benefit;
     private String location;
-    private String contactEmail;
-    private Integer numberOfPositions;
-    private String deadLine;
+    private LocalDateTime postDate;
+    private boolean isActive;
+    private Long numberOfPositions;
+    private LocalDateTime deadLine;
     private String recruiter;  // DTO cho recruiter
     private String shifts;
 
@@ -35,6 +41,30 @@ public class JobPostingDTO {
         this.description = description;
     }
 
+    public String getRequirement() {
+        return requirement;
+    }
+
+    public void setRequirement(String requirement) {
+        this.requirement = requirement;
+    }
+
+    public String getSalary() {
+        return salary;
+    }
+
+    public void setSalary(String salary) {
+        this.salary = salary;
+    }
+
+    public String getBenefit() {
+        return benefit;
+    }
+
+    public void setBenefit(String benefit) {
+        this.benefit = benefit;
+    }
+
     public String getLocation() {
         return location;
     }
@@ -43,27 +73,35 @@ public class JobPostingDTO {
         this.location = location;
     }
 
-    public String getContactEmail() {
-        return contactEmail;
+    public LocalDateTime getPostDate() {
+        return postDate;
     }
 
-    public void setContactEmail(String contactEmail) {
-        this.contactEmail = contactEmail;
+    public void setPostDate(LocalDateTime postDate) {
+        this.postDate = postDate;
     }
 
-    public Integer getNumberOfPositions() {
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
+    }
+
+    public Long getNumberOfPositions() {
         return numberOfPositions;
     }
 
-    public void setNumberOfPositions(Integer numberOfPositions) {
+    public void setNumberOfPositions(Long numberOfPositions) {
         this.numberOfPositions = numberOfPositions;
     }
 
-    public String getDeadLine() {
+    public LocalDateTime getDeadLine() {
         return deadLine;
     }
 
-    public void setDeadLine(String deadLine) {
+    public void setDeadLine(LocalDateTime deadLine) {
         this.deadLine = deadLine;
     }
 

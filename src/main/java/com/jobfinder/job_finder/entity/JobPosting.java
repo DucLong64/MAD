@@ -12,15 +12,17 @@ public class JobPosting {
     private Long id;
     private String title;
     private String description;
+    private String requirement;
+    private String salary;
+    private String benefit;
     private String location;
     private LocalDateTime postDate;
-    private String contactEmail;
     private boolean isActive;
     private Long numberOfPositions;
     private LocalDateTime deadLine;
 
     @ManyToOne
-    @JoinColumn(name="recruiter_id", referencedColumnName = "id")
+    @JoinColumn(name = "recruiter_id", referencedColumnName = "id")
     private User recruiter;
 
     @OneToMany(mappedBy = "jobPosting", cascade = CascadeType.ALL)
@@ -50,6 +52,30 @@ public class JobPosting {
         this.description = description;
     }
 
+    public String getRequirement() {
+        return requirement;
+    }
+
+    public void setRequirement(String requirement) {
+        this.requirement = requirement;
+    }
+
+    public String getSalary() {
+        return salary;
+    }
+
+    public void setSalary(String salary) {
+        this.salary = salary;
+    }
+
+    public String getBenefit() {
+        return benefit;
+    }
+
+    public void setBenefit(String benefit) {
+        this.benefit = benefit;
+    }
+
     public String getLocation() {
         return location;
     }
@@ -66,28 +92,12 @@ public class JobPosting {
         this.postDate = postDate;
     }
 
-    public String getContactEmail() {
-        return contactEmail;
-    }
-
-    public void setContactEmail(String contactEmail) {
-        this.contactEmail = contactEmail;
-    }
-
     public boolean isActive() {
         return isActive;
     }
 
     public void setActive(boolean active) {
         isActive = active;
-    }
-
-    public User getRecruiter() {
-        return recruiter;
-    }
-
-    public void setRecruiter(User recruiter) {
-        this.recruiter = recruiter;
     }
 
     public Long getNumberOfPositions() {
@@ -104,6 +114,14 @@ public class JobPosting {
 
     public void setDeadLine(LocalDateTime deadLine) {
         this.deadLine = deadLine;
+    }
+
+    public User getRecruiter() {
+        return recruiter;
+    }
+
+    public void setRecruiter(User recruiter) {
+        this.recruiter = recruiter;
     }
 
     public List<Shift> getShifts() {

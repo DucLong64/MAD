@@ -7,6 +7,7 @@ import com.jobfinder.job_finder.entity.Shift;
 import com.jobfinder.job_finder.repository.JobPostingRepository;
 import com.jobfinder.job_finder.repository.ShiftRepository;
 import jakarta.persistence.EntityNotFoundException;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +25,8 @@ public class JobPostingService {
     private JobPostingDTOConverter jobPostingDTOConverter;
     @Autowired
     private ShiftService shiftService;
+    @Autowired
+    private ModelMapper modelMapper;
 
     public JobPostingDTO createJobPosting(JobPosting jobPosting) {
         List<Shift> shifts = jobPosting.getShifts();
@@ -56,9 +59,10 @@ public class JobPostingService {
             JobPosting updatedJob = existingJob.get();
             updatedJob.setTitle(jobPosting.getTitle());
             updatedJob.setDescription(jobPosting.getDescription());
-            updatedJob.setContactEmail(jobPosting.getContactEmail());
+            updatedJob.setBenefit(jobPosting.getBenefit());
             updatedJob.setLocation(jobPosting.getLocation());
-            updatedJob.setContactEmail(jobPosting.getContactEmail());
+            updatedJob.setRequirement(jobPosting.getRequirement());
+            updatedJob.setSalary(jobPosting.getSalary());
             updatedJob.setNumberOfPositions(jobPosting.getNumberOfPositions());
             updatedJob.setDeadLine(jobPosting.getDeadLine());
 
