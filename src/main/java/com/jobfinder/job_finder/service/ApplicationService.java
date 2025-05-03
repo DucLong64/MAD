@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -28,5 +29,19 @@ public class ApplicationService {
         application.setStatus(ApplicationStatus.PENDING);
 
         return applicationRepository.save(application);
+    }
+    //Phe duyet application cua ung vien
+    public Application updateApplicationStatus(Long applicationId, ApplicationStatus status) {
+        Optional<Application> application = applicationRepository.findById(applicationId);
+        if (!application.isPresent()) {
+            throw new RuntimeException("Ứng tuyển không tìm thấy");
+        }
+
+        Application existingApplication = application.get();
+        existingApplication.setStatus(status);
+        return applicationRepository.save(existingApplication);
+    }
+    public List<Application> getApplicationsByJobPosting(Long jobPostingId) {
+        return applicationRepository.findByJobPostingId(jobPostingId);
     }
 }

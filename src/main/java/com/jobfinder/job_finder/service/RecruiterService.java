@@ -19,4 +19,5 @@ public class RecruiterService {
                 .orElseThrow(() -> new RuntimeException("Recruiter not found"));
     }
 
+
 }
