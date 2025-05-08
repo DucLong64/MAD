@@ -1,4 +1,4 @@
-package com.jobfinder.job_finder.dto;
+package com.jobfinder.job_finder.dto.request;
 
 
 public class UserLogin {

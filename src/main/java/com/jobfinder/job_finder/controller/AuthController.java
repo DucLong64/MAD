@@ -1,6 +1,10 @@
 package com.jobfinder.job_finder.controller;
 
 import com.jobfinder.job_finder.dto.*;
+import com.jobfinder.job_finder.dto.request.DtoRegister;
+import com.jobfinder.job_finder.dto.request.UserLogin;
+import com.jobfinder.job_finder.dto.response.ApiResponseLogin;
+import com.jobfinder.job_finder.dto.response.ApiResponseRegister;
 import com.jobfinder.job_finder.entity.User;
 import com.jobfinder.job_finder.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

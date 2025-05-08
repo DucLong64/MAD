@@ -1,7 +1,4 @@
-package com.jobfinder.job_finder.dto;
-
-import lombok.Getter;
-import lombok.Setter;
+package com.jobfinder.job_finder.dto.response;
 
 
 public class UserDTOResponse {

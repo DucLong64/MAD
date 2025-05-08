@@ -1,17 +1,18 @@
-package com.jobfinder.job_finder.dto;
+package com.jobfinder.job_finder.dto.response;
 
-public class ApiResponse {
+
+public class ApiResponseLogin {
+
     private String status;
     private String message;
-    private int errorCode;
+    private UserDTOResponse data;
 
-    public ApiResponse(String status, String message, int errorCode) {
+    public ApiResponseLogin(String status, String message, UserDTOResponse data) {
         this.status = status;
         this.message = message;
-        this.errorCode = errorCode;
+        this.data = data;
     }
 
-    // Getters và Setters
     public String getStatus() {
         return status;
     }
@@ -28,11 +29,11 @@ public class ApiResponse {
         this.message = message;
     }
 
-    public int getErrorCode() {
-        return errorCode;
+    public UserDTOResponse getData() {
+        return data;
     }
 
-    public void setErrorCode(int errorCode) {
-        this.errorCode = errorCode;
+    public void setData(UserDTOResponse data) {
+        this.data = data;
     }
 }
