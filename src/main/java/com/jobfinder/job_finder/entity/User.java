@@ -3,6 +3,7 @@ package com.jobfinder.job_finder.entity;
 import com.jobfinder.job_finder.util.Role;
 import jakarta.persistence.*;
 
+
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE) // Hoặc sử dụng InheritanceType.JOINED nếu muốn các bảng riêng biệt
 @DiscriminatorColumn(name = "user_type", discriminatorType = DiscriminatorType.STRING) // Cột phân biệt loại người dùng
