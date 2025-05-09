@@ -15,7 +15,7 @@ public class JobPostingDTO {
     private Long numberOfPositions;
     private LocalDateTime deadLine;
     private String recruiter;  // DTO cho recruiter
-    private String shifts;
+    private String shift;
 
     public Long getId() {
         return id;
@@ -113,11 +113,11 @@ public class JobPostingDTO {
         this.recruiter = recruiter;
     }
 
-    public String getShifts() {
-        return shifts;
+    public String getShift() {
+        return shift;
     }
 
-    public void setShifts(String shifts) {
-        this.shifts = shifts;
+    public void setShift(String shift) {
+        this.shift = shift;
     }
 }

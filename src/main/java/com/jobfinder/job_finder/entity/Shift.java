@@ -1,8 +1,9 @@
 package com.jobfinder.job_finder.entity;
 
 import jakarta.persistence.*;
-
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Shift {
@@ -10,13 +11,16 @@ public class Shift {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
-    private LocalDateTime startTime;
-    private LocalDateTime endTime;
+    private String name;  // Tên ca làm việc
+    private LocalDateTime startTime; // Thời gian bắt đầu
+    private LocalDateTime endTime;   // Thời gian kết thúc
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name="job_posting_id", referencedColumnName = "id")
     private JobPosting jobPosting;
+
+    @OneToMany(mappedBy = "shift")
+    private List<ShiftJobSeeker> shiftJobSeekers;  // Mối quan hệ với bảng trung gian
 
     public Long getId() {
         return id;
@@ -56,5 +60,13 @@ public class Shift {
 
     public void setJobPosting(JobPosting jobPosting) {
         this.jobPosting = jobPosting;
+    }
+
+    public List<ShiftJobSeeker> getShiftJobSeekers() {
+        return shiftJobSeekers;
+    }
+
+    public void setShiftJobSeekers(List<ShiftJobSeeker> shiftJobSeekers) {
+        this.shiftJobSeekers = shiftJobSeekers;
     }
 }

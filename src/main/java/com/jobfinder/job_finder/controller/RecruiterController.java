@@ -3,9 +3,11 @@ package com.jobfinder.job_finder.controller;
 import com.jobfinder.job_finder.converter.JobSeekerDTOConverter;
 import com.jobfinder.job_finder.dto.JobSeekerDTO;
 import com.jobfinder.job_finder.entity.Application;
+import com.jobfinder.job_finder.entity.JobPosting;
 import com.jobfinder.job_finder.entity.JobSeeker;
 import com.jobfinder.job_finder.entity.User;
 import com.jobfinder.job_finder.service.ApplicationService;
+import com.jobfinder.job_finder.service.ShiftService;
 import com.jobfinder.job_finder.service.UserService;
 import com.jobfinder.job_finder.util.ApplicationStatus;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +28,8 @@ public class RecruiterController {
     private JobSeekerDTOConverter jobSeekerDTOConverter;
     @Autowired
     private ApplicationService applicationService;
+    @Autowired
+    private ShiftService shiftService;
     @GetMapping("/seeker/{seeker_id}")
     public ResponseEntity<JobSeekerDTO> getSeeker(@PathVariable long seeker_id) {
         JobSeeker seeker =(JobSeeker) userService.getUserProfile(seeker_id);
@@ -42,6 +46,13 @@ public class RecruiterController {
         try {
             Application updatedApplication = applicationService.updateApplicationStatus(applicationId, status);
 
+            if (status == ApplicationStatus.ACCEPTED) {
+                JobSeeker jobSeeker = updatedApplication.getJobSeeker();  // Lấy ứng viên
+                JobPosting jobPosting = updatedApplication.getJobPosting();  // Lấy công việc
+
+                // Tạo hoặc cập nhật Shift cho ứng viên
+                shiftService.createOrUpdateShiftForJobSeeker(jobSeeker, jobPosting);
+            }
             response.put("status", "success");
             response.put("message", "Trạng thái đơn ứng tuyển đã được cập nhật.");
             response.put("application", updatedApplication.getStatus());

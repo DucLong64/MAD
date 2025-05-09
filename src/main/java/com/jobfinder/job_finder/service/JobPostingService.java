@@ -29,16 +29,13 @@ public class JobPostingService {
     private ModelMapper modelMapper;
 
     public JobPostingDTO createJobPosting(JobPosting jobPosting) {
-        List<Shift> shifts = jobPosting.getShifts();
+        Shift shift = jobPosting.getShift();
         jobPosting.setPostDate(java.time.LocalDateTime.now());
         jobPosting.setActive(true);
         JobPosting savedJobPosting = jobPostingRepository.save(jobPosting);
-
-        if( shifts != null && !shifts.isEmpty()) {
-            for(Shift shift : shifts) {
-                shift.setJobPosting(savedJobPosting);
-                shiftRepository.save(shift);
-            }
+        if (shift != null) {
+            shift.setJobPosting(savedJobPosting);
+            shiftRepository.save(shift);
         }
         return jobPostingDTOConverter.toJobPostingDTO(savedJobPosting);
     }
@@ -66,15 +63,25 @@ public class JobPostingService {
             updatedJob.setNumberOfPositions(jobPosting.getNumberOfPositions());
             updatedJob.setDeadLine(jobPosting.getDeadLine());
 
-            List<Shift> shifts = jobPosting.getShifts();
+            // Lấy ca làm duy nhất
+            Shift shift = jobPosting.getShift();
 
-            // Xóa các ca làm việc cũ liên quan đến tin tuyển dụng này (nếu có) và thêm ca làm việc mới
-            shiftService.deleteAllShiftsByJobId(jobId);
+            // Xóa ca làm cũ liên quan đến tin tuyển dụng này (nếu có) và thêm ca làm việc mới
+            if (shift != null) {
+                // Kiểm tra xem ca làm có thay đổi không
+                Shift existingShift = updatedJob.getShift(); // Lấy ca làm hiện tại
+                if (existingShift != null) {
+                    // Nếu ca làm có thay đổi, cập nhật các thuộc tính
+                    existingShift.setName(shift.getName()); // Cập nhật tên ca
+                    existingShift.setStartTime(shift.getStartTime()); // Cập nhật thời gian bắt đầu
+                    existingShift.setEndTime(shift.getEndTime()); // Cập nhật thời gian kết thúc
 
-            if (shifts != null && !shifts.isEmpty()) {
-                for (Shift shift : shifts) {
-                    shift.setJobPosting(updatedJob);
-                    shiftRepository.save(shift); // Thêm các ca làm việc mới
+                    // Lưu ca làm đã cập nhật
+                    shiftRepository.save(existingShift);
+                } else {
+                    // Nếu không có ca làm cũ, thêm ca làm mới
+                    shift.setJobPosting(updatedJob); // Liên kết ca làm với bài đăng tuyển
+                    shiftRepository.save(shift); // Lưu ca làm mới
                 }
             }
             // Lưu lại thông tin tin tuyển dụng đã cập nhật

@@ -26,12 +26,16 @@ public class JobPostingDTOConverter {
         JobPostingDTO jobPostingDTO = modelMapper.map(jobPosting, JobPostingDTO.class);
         Recruiter recruiter= (Recruiter) jobPosting.getRecruiter();
         jobPostingDTO.setRecruiter(recruiter.getCompanyName());
-        List<Shift> shifts = jobPosting.getShifts();
-        String shiftsResult = shifts.stream().map(shift -> shift.getName()+" : "
-                +shift.getStartTime().format(formatter)+ " -> "
-                +shift.getEndTime().format(formatter))
-                .collect(Collectors.joining(", "));
-        jobPostingDTO.setShifts(shiftsResult);
+        // Lấy thông tin ca làm, giả sử chỉ có một ca làm duy nhất
+        Shift shift = jobPosting.getShift(); // Sử dụng .getShift() thay vì .getShifts()
+        if (shift != null) {
+            String shiftResult = shift.getName() + " : "
+                    + shift.getStartTime().format(formatter) + " -> "
+                    + shift.getEndTime().format(formatter);
+            jobPostingDTO.setShift(shiftResult);
+        } else {
+            jobPostingDTO.setShift("No shifts available"); // Trường hợp không có ca làm
+        }
         return jobPostingDTO;
     }
 

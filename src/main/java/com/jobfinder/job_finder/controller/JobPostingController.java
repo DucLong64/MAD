@@ -1,6 +1,7 @@
 package com.jobfinder.job_finder.controller;
 
 
+import com.jobfinder.job_finder.converter.JobPostingDTOConverter;
 import com.jobfinder.job_finder.dto.JobPostingDTO;
 import com.jobfinder.job_finder.entity.JobPosting;
 import com.jobfinder.job_finder.entity.Recruiter;
@@ -23,6 +24,8 @@ public class JobPostingController {
     private JobPostingService jobPostingService;
     @Autowired
     private RecruiterService recruiterService;
+    @Autowired
+    private JobPostingDTOConverter jobPostingDTOConverter;
     // Đăng tin tuyển dụng
     @PostMapping("/post-job")
     public ResponseEntity<Map<String,Object>> postJob(@RequestBody JobPosting jobPosting, @RequestParam Long recruiterId) {
@@ -90,6 +93,10 @@ public class JobPostingController {
     public ResponseEntity<Void> deleteJob(@PathVariable Long jobId) {
         jobPostingService.deleteJobPosting(jobId);
         return ResponseEntity.noContent().build();
+    }
+    @GetMapping("/job/{jobId}")
+    public ResponseEntity<JobPostingDTO> getJobPosting(@PathVariable Long jobId) {
+        return ResponseEntity.ok(jobPostingDTOConverter.toJobPostingDTO(jobPostingService.getJobPostingById(jobId)));
     }
     // Lay tat ca cac tin
     @GetMapping("/jobs/all")

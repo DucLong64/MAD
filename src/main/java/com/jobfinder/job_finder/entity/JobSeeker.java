@@ -1,8 +1,6 @@
 package com.jobfinder.job_finder.entity;
 
-import jakarta.persistence.DiscriminatorValue;
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
 
 import java.util.List;
 
@@ -27,7 +25,12 @@ public class JobSeeker extends User {
 
     private String cvFile;  // Đường dẫn đến file CV
 
+    @OneToMany(mappedBy = "jobSeeker")
+    private List<ShiftJobSeeker> shiftJobSeekers;  // Mối quan hệ với bảng trung gian job_seeker_shift
+
+
     // Getters and Setters
+
 
     public String getProfilePicture() {
         return profilePicture;
@@ -99,5 +102,13 @@ public class JobSeeker extends User {
 
     public void setCvFile(String cvFile) {
         this.cvFile = cvFile;
+    }
+
+    public List<ShiftJobSeeker> getShiftJobSeekers() {
+        return shiftJobSeekers;
+    }
+
+    public void setShiftJobSeekers(List<ShiftJobSeeker> shiftJobSeekers) {
+        this.shiftJobSeekers = shiftJobSeekers;
     }
 }

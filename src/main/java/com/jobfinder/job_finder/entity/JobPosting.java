@@ -25,8 +25,8 @@ public class JobPosting {
     @JoinColumn(name = "recruiter_id", referencedColumnName = "id")
     private User recruiter;
 
-    @OneToMany(mappedBy = "jobPosting", cascade = CascadeType.ALL)
-    private List<Shift> shifts;
+    @OneToOne(mappedBy = "jobPosting", cascade = CascadeType.ALL)
+    private Shift shift;
 
     public Long getId() {
         return id;
@@ -124,11 +124,11 @@ public class JobPosting {
         this.recruiter = recruiter;
     }
 
-    public List<Shift> getShifts() {
-        return shifts;
+    public Shift getShift() {
+        return shift;
     }
 
-    public void setShifts(List<Shift> shifts) {
-        this.shifts = shifts;
+    public void setShift(Shift shift) {
+        this.shift = shift;
     }
 }
