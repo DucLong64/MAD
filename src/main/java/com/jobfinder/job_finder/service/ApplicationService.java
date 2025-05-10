@@ -1,5 +1,7 @@
 package com.jobfinder.job_finder.service;
 
+import com.jobfinder.job_finder.converter.ApplicationDTOConverter;
+import com.jobfinder.job_finder.dto.ApplicationDTO;
 import com.jobfinder.job_finder.entity.Application;
 import com.jobfinder.job_finder.entity.JobPosting;
 import com.jobfinder.job_finder.entity.JobSeeker;
@@ -9,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,6 +19,8 @@ import java.util.Optional;
 public class ApplicationService {
     @Autowired
     private ApplicationRepository applicationRepository;
+    @Autowired
+    private ApplicationDTOConverter applicationDTOConverter;
 
     public Application applyForJob(JobSeeker jobSeeker, JobPosting jobPosting) {
         Optional<Application> existingApplication = applicationRepository.findByJobSeekerAndJobPosting(jobSeeker,jobPosting);
@@ -43,5 +48,15 @@ public class ApplicationService {
     }
     public List<Application> getApplicationsByJobPosting(Long jobPostingId) {
         return applicationRepository.findByJobPostingId(jobPostingId);
+    }
+
+    public List<ApplicationDTO> getAllApplications() {
+        List<Application> applications = applicationRepository.findAll();
+        List<ApplicationDTO> applicationDTOS = new ArrayList<>();
+        for (Application application : applications) {
+            ApplicationDTO tmp = applicationDTOConverter.convert(application);
+            applicationDTOS.add(tmp);
+        }
+        return applicationDTOS;
     }
 }

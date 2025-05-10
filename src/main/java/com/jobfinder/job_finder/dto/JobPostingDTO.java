@@ -1,5 +1,9 @@
 package com.jobfinder.job_finder.dto;
 
+import com.jobfinder.job_finder.util.JobStatus;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+
 import java.time.LocalDateTime;
 
 public class JobPostingDTO {
@@ -11,8 +15,9 @@ public class JobPostingDTO {
     private String benefit;
     private String location;
     private LocalDateTime postDate;
-    private boolean isActive;
     private Long numberOfPositions;
+    @Enumerated(EnumType.STRING)
+    private JobStatus status;
     private LocalDateTime deadLine;
     private String recruiter;  // DTO cho recruiter
     private String shift;
@@ -81,14 +86,6 @@ public class JobPostingDTO {
         this.postDate = postDate;
     }
 
-    public boolean isActive() {
-        return isActive;
-    }
-
-    public void setActive(boolean active) {
-        isActive = active;
-    }
-
     public Long getNumberOfPositions() {
         return numberOfPositions;
     }
@@ -119,5 +116,13 @@ public class JobPostingDTO {
 
     public void setShift(String shift) {
         this.shift = shift;
+    }
+
+    public JobStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(JobStatus status) {
+        this.status = status;
     }
 }

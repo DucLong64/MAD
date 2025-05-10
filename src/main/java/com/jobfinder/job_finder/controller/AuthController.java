@@ -42,10 +42,17 @@ public class AuthController {
     }
     // Cập nhật hồ sơ
     @PutMapping("/profile/{userId}")
-    public ResponseEntity<User> updateProfile(@PathVariable Long userId, @RequestBody UserDTO userDTO) {
-        User updatedUser = userService.updateProfile(userId, userDTO);
-        return ResponseEntity.ok(updatedUser);
+    public ResponseEntity<ApiResponse<?>> updateProfile(@PathVariable Long userId, @RequestBody UserDTO userDTO) {
+        try {
+            User updatedUser = userService.updateProfile(userId, userDTO);
+            return ResponseEntity.ok(new ApiResponse<>(200, "Profile updated successfully", updatedUser));
+        } catch (Exception e) {
+            // Trả về lỗi nếu không tìm thấy người dùng hoặc có sự cố khác
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ApiResponse<>(404, "User not found: " + e.getMessage(), null));
+        }
     }
+
     // Xem hồ sơ người dùng
     @GetMapping("/profile/{userId}")
     public ResponseEntity<User> getUserProfile(@PathVariable Long userId) {

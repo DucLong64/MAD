@@ -85,11 +85,18 @@ public class JobPostingController {
         }
     }
 
-    // Hủy tin tuyển dụng
+
     @DeleteMapping("/delete-job/{jobId}")
-    public ResponseEntity<Void> deleteJob(@PathVariable Long jobId) {
-        jobPostingService.deleteJobPosting(jobId);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<ApiResponse<?>> deleteJob(@PathVariable Long jobId) {
+        try {
+            jobPostingService.deleteJobPosting(jobId);
+            // Trả về phản hồi thành công
+            return ResponseEntity.ok(new ApiResponse<>(200, "Job posting deleted successfully", null));
+        } catch (Exception e) {
+            // Trả về lỗi nếu không tìm thấy tin tuyển dụng hoặc có lỗi khác
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ApiResponse<>(404, "Job posting not found: " + e.getMessage(), null));
+        }
     }
     @GetMapping("/job/{jobId}")
     public ResponseEntity<JobPostingDTO> getJobPosting(@PathVariable Long jobId) {
@@ -100,11 +107,5 @@ public class JobPostingController {
     public ResponseEntity<List<JobPostingDTO>> getJobPostings() {
         List<JobPostingDTO> jobPostings = jobPostingService.getAllJobPostings();
         return ResponseEntity.ok(jobPostings);
-    }
-    // Lay tat ca cac tin con han
-    @GetMapping("/jobs")
-    public ResponseEntity<List<JobPostingDTO>> getActiveJobPostings() {
-        List<JobPostingDTO> jobs = jobPostingService.getAllJobPostingsAndActiveTure();
-        return ResponseEntity.ok(jobs);
     }
 }

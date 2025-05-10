@@ -1,5 +1,6 @@
 package com.jobfinder.job_finder.entity;
 
+import com.jobfinder.job_finder.util.JobStatus;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -17,7 +18,8 @@ public class JobPosting {
     private String benefit;
     private String location;
     private LocalDateTime postDate;
-    private boolean isActive;
+    @Enumerated(EnumType.STRING)
+    private JobStatus status;
     private Long numberOfPositions;
     private LocalDateTime deadLine;
 
@@ -92,14 +94,6 @@ public class JobPosting {
         this.postDate = postDate;
     }
 
-    public boolean isActive() {
-        return isActive;
-    }
-
-    public void setActive(boolean active) {
-        isActive = active;
-    }
-
     public Long getNumberOfPositions() {
         return numberOfPositions;
     }
@@ -130,5 +124,13 @@ public class JobPosting {
 
     public void setShift(Shift shift) {
         this.shift = shift;
+    }
+
+    public JobStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(JobStatus status) {
+        this.status = status;
     }
 }

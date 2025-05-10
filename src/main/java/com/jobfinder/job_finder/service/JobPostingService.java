@@ -6,6 +6,7 @@ import com.jobfinder.job_finder.entity.JobPosting;
 import com.jobfinder.job_finder.entity.Shift;
 import com.jobfinder.job_finder.repository.JobPostingRepository;
 import com.jobfinder.job_finder.repository.ShiftRepository;
+import com.jobfinder.job_finder.util.JobStatus;
 import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,7 @@ public class JobPostingService {
     public JobPostingDTO createJobPosting(JobPosting jobPosting) {
         Shift shift = jobPosting.getShift();
         jobPosting.setPostDate(java.time.LocalDateTime.now());
-        jobPosting.setActive(true);
+        jobPosting.setStatus(JobStatus.PENDING);
         JobPosting savedJobPosting = jobPostingRepository.save(jobPosting);
         if (shift != null) {
             shift.setJobPosting(savedJobPosting);
@@ -93,13 +94,17 @@ public class JobPostingService {
     }
     // Hủy tin tuyển dụng
     public void deleteJobPosting(Long jobId) {
+        jobPostingRepository.deleteById(jobId);
+
+    }
+
+    // Thay đổi trạng thái tin tuyển dụng
+    public void updateStatusJobPosting(Long jobId, JobStatus jobStatus) {
         Optional<JobPosting> existingJob = jobPostingRepository.findById(jobId);
         if (existingJob.isPresent()) {
             JobPosting jobPosting = existingJob.get();
-            jobPosting.setActive(false);  // Cập nhật trạng thái thành hủy
+            jobPosting.setStatus(jobStatus);
             jobPostingRepository.save(jobPosting);
-        } else {
-            throw new RuntimeException("Job posting not found or does not belong to this recruiter");
         }
     }
     // Lấy tất cả các tin tuyển dụng của tất cả nhà tuyển dụng
@@ -112,8 +117,9 @@ public class JobPostingService {
         }
         return jobPostingDTOS;
     }
-    public List<JobPostingDTO> getAllJobPostingsAndActiveTure() {
-        List<JobPosting> jobPostings = jobPostingRepository.findByisActiveTrue();
+    // Lấy tất cả các tin tuyển dụng có trạng thái Open
+    public List<JobPostingDTO> getAllOpenJobPostings() {
+        List<JobPosting> jobPostings = jobPostingRepository.findByStatus(JobStatus.OPEN);
         List<JobPostingDTO> jobPostingDTOS= new ArrayList<>();
         for(JobPosting jobPosting : jobPostings) {
             JobPostingDTO jobDTO = jobPostingDTOConverter.toJobPostingDTO(jobPosting);
@@ -121,6 +127,7 @@ public class JobPostingService {
         }
         return jobPostingDTOS;
     }
+
     public JobPosting getJobPostingById(Long jobPostingId) {
         return jobPostingRepository.findById(jobPostingId)
                 .orElseThrow(() -> new EntityNotFoundException("JobPosting not found with id: " + jobPostingId));
