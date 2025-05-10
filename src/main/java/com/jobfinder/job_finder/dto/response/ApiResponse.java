@@ -1,23 +1,23 @@
 package com.jobfinder.job_finder.dto.response;
 
-public class ApiResponse {
-    private String status;
+public class ApiResponse<T> {
+    private int code;  // Đổi từ String thành int
     private String message;
-    private int errorCode;
+    private T data;
 
-    public ApiResponse(String status, String message, int errorCode) {
-        this.status = status;
+    public ApiResponse(int code, String message, T data) {
+        this.code = code;
         this.message = message;
-        this.errorCode = errorCode;
+        this.data = data;
     }
 
     // Getters và Setters
-    public String getStatus() {
-        return status;
+    public int getCode() {
+        return code;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setCode(int code) {
+        this.code = code;
     }
 
     public String getMessage() {
@@ -28,11 +28,11 @@ public class ApiResponse {
         this.message = message;
     }
 
-    public int getErrorCode() {
-        return errorCode;
+    public T getData() {
+        return data;
     }
 
-    public void setErrorCode(int errorCode) {
-        this.errorCode = errorCode;
+    public void setData(T data) {
+        this.data = data;
     }
 }

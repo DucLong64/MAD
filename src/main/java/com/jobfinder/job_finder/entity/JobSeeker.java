@@ -1,5 +1,6 @@
 package com.jobfinder.job_finder.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -26,6 +27,7 @@ public class JobSeeker extends User {
     private String cvFile;  // Đường dẫn đến file CV
 
     @OneToMany(mappedBy = "jobSeeker")
+    @JsonIgnore  // Thêm annotation này để không xuất hiện trong JSON trả về
     private List<ShiftJobSeeker> shiftJobSeekers;  // Mối quan hệ với bảng trung gian job_seeker_shift
 
 

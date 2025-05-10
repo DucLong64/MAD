@@ -3,6 +3,7 @@ package com.jobfinder.job_finder.controller;
 import com.jobfinder.job_finder.dto.*;
 import com.jobfinder.job_finder.dto.request.DtoRegister;
 import com.jobfinder.job_finder.dto.request.UserLogin;
+import com.jobfinder.job_finder.dto.response.ApiResponse;
 import com.jobfinder.job_finder.dto.response.ApiResponseLogin;
 import com.jobfinder.job_finder.dto.response.ApiResponseRegister;
 import com.jobfinder.job_finder.entity.User;
@@ -24,22 +25,21 @@ public class AuthController {
 
     // Đăng ký
     @PostMapping("/register")
-    public ResponseEntity<ApiResponseRegister> register(@RequestBody DtoRegister dtoRegister) {
-        ApiResponseRegister response = userService.registerUser(dtoRegister);
+    public ResponseEntity<ApiResponse<?>> register(@RequestBody DtoRegister dtoRegister) {
+        ApiResponse<?> response = userService.registerUser(dtoRegister); // Gọi method với ApiResponse trả về
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     // Đăng nhập
 
     @PostMapping("/login")
-    public ResponseEntity<ApiResponseLogin> login(@RequestBody UserLogin userLogin) {
+    public ResponseEntity<ApiResponse<?>> login(@RequestBody UserLogin userLogin) {
         try {
-            ApiResponseLogin response= userService.loginUser(userLogin);
-            return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON)
-                    .body(response);
+            ApiResponse<?> response = userService.loginUser(userLogin); // Gọi method với ApiResponse trả về
+            return ResponseEntity.ok().body(response);
         } catch (Exception e) {
             // Trả về lỗi nếu có sự cố
-            ApiResponseLogin response = new ApiResponseLogin("error", e.getMessage(), null);
+            ApiResponse<?> response = new ApiResponse<>(400, e.getMessage(), null);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
     }

@@ -3,6 +3,7 @@ package com.jobfinder.job_finder.service;
 import com.jobfinder.job_finder.dto.*;
 import com.jobfinder.job_finder.dto.request.DtoRegister;
 import com.jobfinder.job_finder.dto.request.UserLogin;
+import com.jobfinder.job_finder.dto.response.ApiResponse;
 import com.jobfinder.job_finder.dto.response.ApiResponseLogin;
 import com.jobfinder.job_finder.dto.response.ApiResponseRegister;
 import com.jobfinder.job_finder.dto.response.UserDTOResponse;
@@ -27,10 +28,12 @@ public class UserService {
     private UserRepository userRepository;
 
     // Đăng ký người dùng
-    public ApiResponseRegister registerUser(DtoRegister dtoRegister) {
+    public ApiResponse<?> registerUser(DtoRegister dtoRegister) {
+        // Kiểm tra nếu email đã tồn tại trong hệ thống
         if (userRepository.findByEmail(dtoRegister.getEmail()).isPresent()) {
-            return new ApiResponseRegister("Email already in use", false, HttpStatus.BAD_REQUEST.value());  // Trả về lỗi nếu email đã tồn tại
+            return new ApiResponse<>(400, "Email already in use", null);  // Trả về lỗi nếu email đã tồn tại
         }
+
         User user = new User();
         // Đăng ký theo vai trò
         if (dtoRegister.getRole() == Role.JOB_SEEKER) {
@@ -44,11 +47,13 @@ public class UserService {
         user.setPassword(new BCryptPasswordEncoder().encode(dtoRegister.getPassword()));  // Mã hóa mật khẩu
         user.setRole(dtoRegister.getRole());
         userRepository.save(user);
-        return new ApiResponseRegister("User registered successfully", true, HttpStatus.CREATED.value());  // Thông báo thành công
+
+        // Trả về thông báo thành công
+        return new ApiResponse<>(201, "User registered successfully", null);
     }
 
     // Đăng nhập người dùng
-    public ApiResponseLogin loginUser(UserLogin userLogin) {
+    public ApiResponse<?> loginUser(UserLogin userLogin) {
         User user = userRepository.findByEmail(userLogin.getEmail())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
@@ -56,13 +61,14 @@ public class UserService {
             throw new RuntimeException("Invalid credentials");
         }
 
-        String token= jwtUtil.generateToken(user.getEmail());
-        UserDTOResponse userDTOResponse= new UserDTOResponse(user.getId()
-                                                    ,user.getFullName()
-                                                    ,user.getEmail()
-                                                    ,user.getRole().toString()
-                                                    ,token);
-        return new ApiResponseLogin("success", "Login successful", userDTOResponse);
+        String token = jwtUtil.generateToken(user.getEmail());
+        UserDTOResponse userDTOResponse = new UserDTOResponse(user.getId(),
+                user.getFullName(),
+                user.getEmail(),
+                user.getRole().toString(),
+                token);
+        // Trả về ApiResponse với mã trạng thái 200, thông báo thành công và dữ liệu người dùng
+        return new ApiResponse<>(200, "Login successful", userDTOResponse);
     }
     // Cập nhật hồ sơ người dùng
     public User updateProfile(Long userId, UserDTO userDTO) {

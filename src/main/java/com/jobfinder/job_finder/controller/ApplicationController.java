@@ -23,20 +23,21 @@ public class ApplicationController {
     private JobPostingService jobPostingService;
 
     @PostMapping("/apply")
-    public ApiResponse applyForJob(@RequestParam Long jobSeekerId,
-                                   @RequestParam Long jobPostingId) {
+    public ApiResponse<?> applyForJob(@RequestParam Long jobSeekerId,
+                                      @RequestParam Long jobPostingId) {
         JobSeeker jobSeeker = (JobSeeker) userService.getUserProfile(jobSeekerId);
         JobPosting jobPosting = jobPostingService.getJobPostingById(jobPostingId);
+
         if (jobSeeker == null || jobPosting == null) {
-            return new ApiResponse("Fail", "Candidate or job not exist!", 400);
+            return new ApiResponse<>(400, "Candidate or job not exist!", null);
         }
 
         try {
             applicationService.applyForJob(jobSeeker, jobPosting);
-            return new ApiResponse("Success","Application submitted successfully!", 200);
+            return new ApiResponse<>(200, "Application submitted successfully!", null);
 
         } catch (IllegalStateException e) {
-            return new ApiResponse("Fail", "You have submitted yet!", 400);
+            return new ApiResponse<>(400, "You have submitted yet!", null);
         }
     }
 }
