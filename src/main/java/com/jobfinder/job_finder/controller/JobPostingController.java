@@ -3,6 +3,7 @@ package com.jobfinder.job_finder.controller;
 
 import com.jobfinder.job_finder.converter.JobPostingDTOConverter;
 import com.jobfinder.job_finder.dto.JobPostingDTO;
+import com.jobfinder.job_finder.dto.response.ApiResponse;
 import com.jobfinder.job_finder.entity.JobPosting;
 import com.jobfinder.job_finder.entity.Recruiter;
 import com.jobfinder.job_finder.entity.User;
@@ -28,30 +29,26 @@ public class JobPostingController {
     private JobPostingDTOConverter jobPostingDTOConverter;
     // Đăng tin tuyển dụng
     @PostMapping("/post-job")
-    public ResponseEntity<Map<String,Object>> postJob(@RequestBody JobPosting jobPosting, @RequestParam Long recruiterId) {
+    public ResponseEntity<ApiResponse<?>> postJob(@RequestBody JobPosting jobPosting, @RequestParam Long recruiterId) {
         Map<String,Object> response = new HashMap<>();
         try {
             // Tìm kiếm nhà tuyển dụng
             Recruiter recruiter = recruiterService.getRecruiterById(recruiterId);
             if (recruiter == null) {
-                response.put("status", "error");
-                response.put("message", "Recruiter not found.");
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(new ApiResponse<>(404, "Recruiter not found", null));
             }
             jobPosting.setRecruiter(recruiter);
             // Tạo job tuyển dụng mới
             JobPostingDTO createdJob = jobPostingService.createJobPosting(jobPosting);
-            // Tạo phản hồi thành công
-            response.put("status", "success");
-            response.put("message", "Job posted successfully.");
-            response.put("job", createdJob);
-            return ResponseEntity.ok(response);
+
+            // Trả về phản hồi thành công
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(new ApiResponse<>(201, "Job posted successfully", createdJob));
         } catch (Exception e) {
             // Xử lý ngoại lệ nếu có lỗi xảy ra
-            response.put("status", "error");
-            response.put("message", "An error occurred while posting the job: " + e.getMessage());
-
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse<>(500, "An error occurred while posting the job: " + e.getMessage(), null));
         }
     }
     // Lấy danh sách tin tuyển dụng của nhà tuyển dụng

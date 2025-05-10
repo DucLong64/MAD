@@ -1,7 +1,7 @@
 package com.jobfinder.job_finder.dto.response;
 
 public class ApiResponse<T> {
-    private int code;  // Đổi từ String thành int
+    private int code;
     private String message;
     private T data;
 

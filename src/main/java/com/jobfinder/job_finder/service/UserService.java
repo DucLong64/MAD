@@ -4,8 +4,6 @@ import com.jobfinder.job_finder.dto.*;
 import com.jobfinder.job_finder.dto.request.DtoRegister;
 import com.jobfinder.job_finder.dto.request.UserLogin;
 import com.jobfinder.job_finder.dto.response.ApiResponse;
-import com.jobfinder.job_finder.dto.response.ApiResponseLogin;
-import com.jobfinder.job_finder.dto.response.ApiResponseRegister;
 import com.jobfinder.job_finder.dto.response.UserDTOResponse;
 import com.jobfinder.job_finder.entity.JobSeeker;
 import com.jobfinder.job_finder.entity.Recruiter;
@@ -14,7 +12,6 @@ import com.jobfinder.job_finder.util.Role;
 import com.jobfinder.job_finder.entity.User;
 import com.jobfinder.job_finder.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 

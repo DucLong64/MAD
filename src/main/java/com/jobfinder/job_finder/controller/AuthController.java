@@ -4,13 +4,10 @@ import com.jobfinder.job_finder.dto.*;
 import com.jobfinder.job_finder.dto.request.DtoRegister;
 import com.jobfinder.job_finder.dto.request.UserLogin;
 import com.jobfinder.job_finder.dto.response.ApiResponse;
-import com.jobfinder.job_finder.dto.response.ApiResponseLogin;
-import com.jobfinder.job_finder.dto.response.ApiResponseRegister;
 import com.jobfinder.job_finder.entity.User;
 import com.jobfinder.job_finder.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
