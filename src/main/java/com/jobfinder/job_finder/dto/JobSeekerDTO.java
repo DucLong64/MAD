@@ -6,6 +6,7 @@ import jakarta.persistence.ElementCollection;
 import java.util.List;
 
 public class JobSeekerDTO {
+    private Long id;
     private String fullName;
     private String email;
     private String profilePicture;
@@ -17,6 +18,14 @@ public class JobSeekerDTO {
     private String languages;
     private String certifications;
     private String cvFile;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getFullName() {
         return fullName;

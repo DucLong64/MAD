@@ -90,5 +90,15 @@ public class RecruiterController {
                     .body(null);  // Trả về mã lỗi 500 nếu có ngoại lệ
         }
     }
+    @GetMapping("/applications/pending/{jobPostingId}")
+    public ResponseEntity<List<ApplicationDTO>> getApplicationsByJobPostingAndStatus(@PathVariable Long jobPostingId) {
+        try {
+            List<ApplicationDTO> applicationDTOS = applicationService.getApplicationsByJobPostingIdAndStatus(jobPostingId);
+            return ResponseEntity.ok(applicationDTOS);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(null);  // Trả về mã lỗi 500 nếu có ngoại lệ
+        }
+    }
 
 }

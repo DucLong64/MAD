@@ -1,18 +1,20 @@
 package com.jobfinder.job_finder.dto;
 
+import com.jobfinder.job_finder.entity.JobSeeker;
+
 import java.time.LocalDateTime;
 
 public class ApplicationDTO {
     private Long idApplication;
-    private Long idJobSeeker;
+    private JobSeekerDTO jobSeeker;
     private Long idJobPosting;
     private LocalDateTime applicationDate;
     private String status;
 
     // Constructor
-    public ApplicationDTO(Long idApplication, Long idJobSeeker, Long idJobPosting, LocalDateTime applicationDate, String status) {
+    public ApplicationDTO(Long idApplication, JobSeekerDTO jobSeeker, Long idJobPosting, LocalDateTime applicationDate, String status) {
         this.idApplication = idApplication;
-        this.idJobSeeker = idJobSeeker;
+        this.jobSeeker = jobSeeker;
         this.idJobPosting = idJobPosting;
         this.applicationDate = applicationDate;
         this.status = status;
@@ -26,12 +28,12 @@ public class ApplicationDTO {
         this.idApplication = idApplication;
     }
 
-    public Long getIdJobSeeker() {
-        return idJobSeeker;
+    public JobSeekerDTO getJobSeeker() {
+        return jobSeeker;
     }
 
-    public void setIdJobSeeker(Long idJobSeeker) {
-        this.idJobSeeker = idJobSeeker;
+    public void setJobSeeker(JobSeekerDTO jobSeeker) {
+        this.jobSeeker = jobSeeker;
     }
 
     public Long getIdJobPosting() {

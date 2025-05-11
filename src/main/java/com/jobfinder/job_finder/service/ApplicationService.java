@@ -7,6 +7,7 @@ import com.jobfinder.job_finder.entity.JobPosting;
 import com.jobfinder.job_finder.entity.JobSeeker;
 import com.jobfinder.job_finder.repository.ApplicationRepository;
 import com.jobfinder.job_finder.util.ApplicationStatus;
+import com.jobfinder.job_finder.util.JobStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -52,6 +53,15 @@ public class ApplicationService {
 
     public List<ApplicationDTO> getAllApplications() {
         List<Application> applications = applicationRepository.findAll();
+        List<ApplicationDTO> applicationDTOS = new ArrayList<>();
+        for (Application application : applications) {
+            ApplicationDTO tmp = applicationDTOConverter.convert(application);
+            applicationDTOS.add(tmp);
+        }
+        return applicationDTOS;
+    }
+    public List<ApplicationDTO> getApplicationsByJobPostingIdAndStatus(Long jobPostingId) {
+        List<Application> applications= applicationRepository.findByJobPostingIdAndStatus(jobPostingId, ApplicationStatus.PENDING);
         List<ApplicationDTO> applicationDTOS = new ArrayList<>();
         for (Application application : applications) {
             ApplicationDTO tmp = applicationDTOConverter.convert(application);

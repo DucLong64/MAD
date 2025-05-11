@@ -1,4 +1,4 @@
-package com.jobfinder.job_finder.controller.seeker;
+package com.jobfinder.job_finder.controller;
 
 import com.jobfinder.job_finder.dto.JobPostingDTO;
 import com.jobfinder.job_finder.dto.response.ShiftDTO;
