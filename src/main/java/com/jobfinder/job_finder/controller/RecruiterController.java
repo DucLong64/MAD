@@ -41,11 +41,26 @@ public class RecruiterController {
     @Autowired
     private JobPostingService jobPostingService;
 
+    // Lấy thông tin hồ sơ người tìm việc
     @GetMapping("/seeker/{seeker_id}")
-    public ResponseEntity<JobSeekerDTO> getSeeker(@PathVariable long seeker_id) {
-        JobSeeker seeker =(JobSeeker) userService.getUserProfile(seeker_id);
-        JobSeekerDTO jobSeekerDTO= jobSeekerDTOConverter.toDTO(seeker);
-        return ResponseEntity.ok(jobSeekerDTO);
+    public ResponseEntity<ApiResponse<?>> getSeeker(@PathVariable long seeker_id) {
+        try {
+            JobSeeker seeker = (JobSeeker) userService.getUserProfile(seeker_id);
+
+            if (seeker == null) {
+                // Nếu không tìm thấy người tìm việc, trả về lỗi 404
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(new ApiResponse<>(404, "Job seeker not found", null));
+            }
+
+            // Chuyển đổi thành DTO và trả về phản hồi thành công
+            JobSeekerDTO jobSeekerDTO = jobSeekerDTOConverter.toDTO(seeker);
+            return ResponseEntity.ok(new ApiResponse<>(200, "Job seeker profile fetched successfully", jobSeekerDTO));
+        } catch (Exception e) {
+            // Xử lý ngoại lệ nếu có lỗi xảy ra
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse<>(500, "An error occurred while fetching the job seeker profile: " + e.getMessage(), null));
+        }
     }
     // Phê duyệt hoặc từ chối đơn ứng tuyển
 
@@ -74,31 +89,48 @@ public class RecruiterController {
     }
     // Lấy tất cả các đơn ứng tuyển cho một tin tuyển dụng
     @GetMapping("/applications/{jobPostingId}")
-    public ResponseEntity<List<ApplicationDTO>> getApplicationsByJobPosting(@PathVariable Long jobPostingId) {
+    public ResponseEntity<ApiResponse<?>> getApplicationsByJobPosting(@PathVariable Long jobPostingId) {
         try {
             List<Application> applications = applicationService.getApplicationsByJobPosting(jobPostingId);
             List<ApplicationDTO> applicationDTOS = new ArrayList<>();
+
             for (Application application : applications) {
                 ApplicationDTO tmp = applicationDTOConverter.convert(application);
                 applicationDTOS.add(tmp);
             }
-            if (applications.isEmpty()) {
-                return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);  // Trả về mã 204 nếu không có đơn ứng tuyển
+
+            // Nếu không có đơn ứng tuyển, trả về mã 204 No Content với thông điệp
+            if (applicationDTOS.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NO_CONTENT)
+                        .body(new ApiResponse<>(204, "No applications found for this job posting.", null));
             }
-            return ResponseEntity.ok(applicationDTOS);
+
+            // Trả về phản hồi thành công với danh sách đơn ứng tuyển
+            return ResponseEntity.ok(new ApiResponse<>(200, "Applications fetched successfully", applicationDTOS));
+
         } catch (Exception e) {
+            // Xử lý ngoại lệ nếu có lỗi xảy ra
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(null);  // Trả về mã lỗi 500 nếu có ngoại lệ
+                    .body(new ApiResponse<>(500, "An error occurred while fetching applications: " + e.getMessage(), null));
         }
     }
     @GetMapping("/applications/pending/{jobPostingId}")
-    public ResponseEntity<List<ApplicationDTO>> getApplicationsByJobPostingAndStatus(@PathVariable Long jobPostingId) {
+    public ResponseEntity<ApiResponse<?>> getApplicationsByJobPostingAndStatus(@PathVariable Long jobPostingId) {
         try {
             List<ApplicationDTO> applicationDTOS = applicationService.getApplicationsByJobPostingIdAndStatus(jobPostingId);
-            return ResponseEntity.ok(applicationDTOS);
+            // Nếu không có đơn ứng tuyển, trả về mã 204 No Content với thông điệp
+            if (applicationDTOS.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NO_CONTENT)
+                        .body(new ApiResponse<>(204, "No applications found for this job posting.", null));
+            }
+
+            // Trả về phản hồi thành công với danh sách đơn ứng tuyển
+            return ResponseEntity.ok(new ApiResponse<>(200, "Applications fetched successfully", applicationDTOS));
+
         } catch (Exception e) {
+            // Xử lý ngoại lệ nếu có lỗi xảy ra
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(null);  // Trả về mã lỗi 500 nếu có ngoại lệ
+                    .body(new ApiResponse<>(500, "An error occurred while fetching applications: " + e.getMessage(), null));
         }
     }
 

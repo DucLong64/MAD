@@ -55,15 +55,37 @@ public class AuthController {
 
     // Xem hồ sơ người dùng
     @GetMapping("/profile/{userId}")
-    public ResponseEntity<User> getUserProfile(@PathVariable Long userId) {
-        User user = userService.getUserProfile(userId);
-        return ResponseEntity.ok(user);
+    public ResponseEntity<ApiResponse<?>> getUserProfile(@PathVariable Long userId) {
+        try {
+            User user = userService.getUserProfile(userId);
+
+            if (user == null) {
+                // Nếu không tìm thấy người dùng, trả về lỗi 404
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(new ApiResponse<>(404, "User not found", null));
+            }
+
+            // Trả về phản hồi thành công
+            return ResponseEntity.ok(new ApiResponse<>(200, "User profile fetched successfully", user));
+        } catch (Exception e) {
+            // Xử lý ngoại lệ nếu có lỗi xảy ra
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse<>(500, "An error occurred while fetching the user profile: " + e.getMessage(), null));
+        }
     }
     // Lấy tất cả hồ sơ người dùng
     @GetMapping("/profile")
-    public ResponseEntity<List<User>> getAllUserProfiles() {
-        List<User> users = userService.getAllUserProfiles();
-        return ResponseEntity.ok(users);
+    public ResponseEntity<ApiResponse<?>> getAllUserProfiles() {
+        try {
+            List<User> users = userService.getAllUserProfiles();
+
+            // Trả về phản hồi thành công
+            return ResponseEntity.ok(new ApiResponse<>(200, "All user profiles fetched successfully", users));
+        } catch (Exception e) {
+            // Xử lý ngoại lệ nếu có lỗi xảy ra
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse<>(500, "An error occurred while fetching user profiles: " + e.getMessage(), null));
+        }
     }
 
 }
