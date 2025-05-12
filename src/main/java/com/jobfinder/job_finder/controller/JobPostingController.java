@@ -30,7 +30,6 @@ public class JobPostingController {
     // Đăng tin tuyển dụng
     @PostMapping("/post-job")
     public ResponseEntity<ApiResponse<?>> postJob(@RequestBody JobPosting jobPosting, @RequestParam Long recruiterId) {
-        Map<String,Object> response = new HashMap<>();
         try {
             // Tìm kiếm nhà tuyển dụng
             Recruiter recruiter = recruiterService.getRecruiterById(recruiterId);
@@ -60,28 +59,21 @@ public class JobPostingController {
 
     // Cập nhật tin tuyển dụng
     @PutMapping("/update-job/{jobId}")
-    public ResponseEntity<Map<String, Object>> updateJob(@PathVariable Long jobId, @RequestBody JobPosting jobPosting) {
-
-        Map<String, Object> response = new HashMap<>();
+    public ResponseEntity<ApiResponse<?>> updateJob(@PathVariable Long jobId, @RequestBody JobPosting jobPosting) {
         try {
             // Tìm kiếm tin tuyển dụng cần cập nhật
             JobPostingDTO existingJob = jobPostingService.updateJobPosting(jobId, jobPosting);
             if (existingJob == null) {
-                response.put("status", "error");
-                response.put("message", "Job posting not found or does not belong to this recruiter.");
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(new ApiResponse<>(404, "Job not found", null));
             }
 
             // Tạo phản hồi thành công
-            response.put("status", "success");
-            response.put("message", "Job updated successfully.");
-            response.put("job", existingJob);
-            return ResponseEntity.ok(response);
+            return ResponseEntity.ok(new ApiResponse<>(200, "Job updated successfully", existingJob));
         } catch (Exception e) {
             // Xử lý ngoại lệ nếu có lỗi xảy ra
-            response.put("status", "error");
-            response.put("message", "An error occurred while updating the job: " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse<>(500, "An error occurred while updating the job: " + e.getMessage(), null));
         }
     }
 

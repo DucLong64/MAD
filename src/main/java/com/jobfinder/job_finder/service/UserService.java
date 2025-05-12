@@ -74,7 +74,6 @@ public class UserService {
         if (user.getRole() == Role.JOB_SEEKER) {
             JobSeeker jobSeeker = (JobSeeker) user;
             jobSeeker.setFullName(userDTO.getFullName());
-            jobSeeker.setEmail(userDTO.getEmail());
             jobSeeker.setProfilePicture(userDTO.getProfilePicture());
             jobSeeker.setPhoneNumber(userDTO.getPhoneNumber());
             jobSeeker.setBirthDate(userDTO.getBirthDate());
@@ -87,7 +86,7 @@ public class UserService {
         } else if (user.getRole() == Role.RECRUITER) {
             Recruiter recruiter = (Recruiter) user;
             recruiter.setFullName(userDTO.getFullName());
-            recruiter.setEmail(userDTO.getEmail());
+            recruiter.setPhoneNumber(userDTO.getPhoneNumber());
             recruiter.setCompanyName(userDTO.getCompanyName());
             recruiter.setCompanyAddress(userDTO.getCompanyAddress());
             recruiter.setCompanyPhoneNumber(userDTO.getCompanyPhoneNumber());

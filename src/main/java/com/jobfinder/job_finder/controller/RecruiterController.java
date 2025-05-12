@@ -48,6 +48,7 @@ public class RecruiterController {
         return ResponseEntity.ok(jobSeekerDTO);
     }
     // Phê duyệt hoặc từ chối đơn ứng tuyển
+
     @PutMapping("/update-application-status/{applicationId}")
     public ResponseEntity<ApiResponse<?>> updateApplicationStatus(
             @PathVariable Long applicationId,

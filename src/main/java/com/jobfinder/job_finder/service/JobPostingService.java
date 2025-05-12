@@ -32,6 +32,7 @@ public class JobPostingService {
     public JobPostingDTO createJobPosting(JobPosting jobPosting) {
         Shift shift = jobPosting.getShift();
         jobPosting.setPostDate(java.time.LocalDateTime.now());
+        jobPosting.setUpdatedDate(java.time.LocalDateTime.now());
         jobPosting.setStatus(JobStatus.PENDING);
         JobPosting savedJobPosting = jobPostingRepository.save(jobPosting);
         if (shift != null) {
@@ -63,6 +64,7 @@ public class JobPostingService {
             updatedJob.setSalary(jobPosting.getSalary());
             updatedJob.setNumberOfPositions(jobPosting.getNumberOfPositions());
             updatedJob.setDeadLine(jobPosting.getDeadLine());
+            updatedJob.setUpdatedDate(java.time.LocalDateTime.now());
 
             // Lấy ca làm duy nhất
             Shift shift = jobPosting.getShift();
