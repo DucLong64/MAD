@@ -58,10 +58,10 @@ public class JobPostingController {
         }
     }
     // Lấy danh sách tin tuyển dụng của nhà tuyển dụng
-    @GetMapping("/jobs/{id}")
-    public ResponseEntity<ApiResponse<?>> getAllJobPostings(@PathVariable Long id) {
+    @GetMapping("/jobs/{recuiterId}")
+    public ResponseEntity<ApiResponse<?>> getAllJobPostings(@PathVariable Long recuiterId) {
         try {
-            List<JobPostingDTO> jobs = jobPostingService.getJobPostings(id);
+            List<JobPostingDTO> jobs = jobPostingService.getJobPostings(recuiterId);
 
             if (jobs == null || jobs.isEmpty()) {
                 // Nếu không tìm thấy tin tuyển dụng, trả về lỗi 404
