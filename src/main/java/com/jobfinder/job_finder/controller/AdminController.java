@@ -33,7 +33,7 @@ public class AdminController {
             jobPostingService.updateStatusJobPosting(jobId, jobStatus);
 
             // Trả về phản hồi thành công
-            return ResponseEntity.ok(new ApiResponse<>(200, "Job status updated successfully", jobStatus));
+            return ResponseEntity.ok(new ApiResponse<>(200, "Job status updated successfully: "+ jobStatus, null));
         } catch (Exception e) {
             // Trả về lỗi nếu có sự cố
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

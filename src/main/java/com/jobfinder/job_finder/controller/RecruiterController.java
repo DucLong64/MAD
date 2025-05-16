@@ -79,7 +79,7 @@ public class RecruiterController {
                 shiftService.createOrUpdateShiftForJobSeeker(jobSeeker, jobPosting);
             }
             // Trả về phản hồi thành công
-            return ResponseEntity.ok(new ApiResponse<>(200, "Trạng thái đơn ứng tuyển đã được cập nhật.", updatedApplication.getStatus()));
+            return ResponseEntity.ok(new ApiResponse<>(200, "Trạng thái đơn ứng tuyển đã được cập nhật: "+updatedApplication.getStatus(), null));
         } catch (Exception e) {
             // Trả về lỗi nếu có sự cố
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

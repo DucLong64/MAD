@@ -39,7 +39,7 @@ public class SecurityConfig {
             @Override
             public void addCorsMappings(@NonNull CorsRegistry registry) {
                 registry.addMapping("**")
-                        .allowedOrigins("http://localhost:3000")
+                        .allowedOrigins("*")
                         .allowedMethods("GET", "POST", "PUT", "DELETE") // Allowed HTTP methods
                         .allowedHeaders("*") // Allowed request headers
                         .allowCredentials(false)
@@ -69,13 +69,5 @@ public class SecurityConfig {
         return config.getAuthenticationManager();
     }
 
-    // TODO: Code continue before
-//    @Bean
-//    public AuthenticationProvider provider() {
-//        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-//        provider.setUserDetailsService(userService.userDetailsService());
-//        provider.setPasswordEncoder(getPasswordEncoder());
-//
-//        return provider;
-//    }
+
 }
