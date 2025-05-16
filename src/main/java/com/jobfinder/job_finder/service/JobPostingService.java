@@ -12,9 +12,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class JobPostingService {
@@ -133,6 +132,43 @@ public class JobPostingService {
     public JobPosting getJobPostingById(Long jobPostingId) {
         return jobPostingRepository.findById(jobPostingId)
                 .orElseThrow(() -> new EntityNotFoundException("JobPosting not found with id: " + jobPostingId));
+    }
+    public Map<String, Object> getHomeData(Long recruiterId, Integer month) {
+        List<JobPosting> jobPostings;
+
+        if (month != null) {
+            jobPostings = jobPostingRepository.findByRecruiterIdAndMonth(recruiterId, month);
+        } else {
+            jobPostings = jobPostingRepository.findByRecruiterId(recruiterId);
+        }
+
+        int open = 0, working = 0, closed = 0;
+        List<Map<String, Object>> jobs = new ArrayList<>();
+        for (JobPosting job : jobPostings) {
+            switch (job.getStatus().toString()) {
+                case "OPEN": open++;
+                    Map<String, Object> jobInfo = new HashMap<>();
+                    jobInfo.put("title", job.getTitle());
+                    jobInfo.put("createAt", job.getPostDate());
+                    jobInfo.put("updateAt", job.getUpdatedDate());
+                    jobInfo.put("endAt", job.getDeadLine());
+                    jobInfo.put("numberOfRecruit", job.getNumberOfPositions());
+                    jobInfo.put("numberOfApplicants", job.getApplications().size());
+                    jobInfo.put("companyAddress", job.getLocation());
+                    jobs.add(jobInfo);
+                    break;
+                case "WORKING": working++; break;
+                case "CLOSE": closed++; break;
+            }
+        }
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("OPEN", open);
+        result.put("WORKING", working);
+        result.put("CLOSE", closed);
+        result.put("job", jobs);
+
+        return result;
     }
 
 }
