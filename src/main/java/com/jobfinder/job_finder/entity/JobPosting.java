@@ -35,4 +35,7 @@ public class JobPosting {
     @OneToOne(mappedBy = "jobPosting", cascade = CascadeType.ALL)
     private Shift shift;
 
+    @OneToMany(mappedBy = "jobPosting", cascade = CascadeType.ALL)
+    private List<Application> applications;
+
 }

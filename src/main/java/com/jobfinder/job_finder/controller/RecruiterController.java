@@ -41,6 +41,15 @@ public class RecruiterController {
     @Autowired
     private JobPostingService jobPostingService;
 
+    @GetMapping("/home")
+    public ResponseEntity<ApiResponse<Map<String, Object>>> getHomeData(
+            @RequestParam Long recruiterId,
+            @RequestParam(required = false) Integer month // 1-12
+    ) {
+        Map<String, Object> data = jobPostingService.getHomeData(recruiterId, month);
+        ApiResponse<Map<String, Object>> response = new ApiResponse<>(200, "Success", data);
+        return ResponseEntity.ok(response);
+    }
     // Lấy thông tin hồ sơ người tìm việc
     @GetMapping("/seeker/{seeker_id}")
     public ResponseEntity<ApiResponse<?>> getSeeker(@PathVariable long seeker_id) {
@@ -133,5 +142,6 @@ public class RecruiterController {
                     .body(new ApiResponse<>(500, "An error occurred while fetching applications: " + e.getMessage(), null));
         }
     }
+
 
 }

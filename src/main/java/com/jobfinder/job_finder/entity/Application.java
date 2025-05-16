@@ -2,9 +2,12 @@ package com.jobfinder.job_finder.entity;
 
 import com.jobfinder.job_finder.util.ApplicationStatus;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
-
+@Getter
+@Setter
 @Entity
 public class Application {
     @Id
@@ -22,44 +25,4 @@ public class Application {
 
     @Enumerated(EnumType.STRING)
     private ApplicationStatus status;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public JobSeeker getJobSeeker() {
-        return jobSeeker;
-    }
-
-    public void setJobSeeker(JobSeeker jobSeeker) {
-        this.jobSeeker = jobSeeker;
-    }
-
-    public JobPosting getJobPosting() {
-        return jobPosting;
-    }
-
-    public void setJobPosting(JobPosting jobPosting) {
-        this.jobPosting = jobPosting;
-    }
-
-    public LocalDateTime getApplicationDate() {
-        return applicationDate;
-    }
-
-    public void setApplicationDate(LocalDateTime applicationDate) {
-        this.applicationDate = applicationDate;
-    }
-
-    public ApplicationStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(ApplicationStatus status) {
-        this.status = status;
-    }
 }
