@@ -36,7 +36,11 @@ dependencies {
 	// https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-starter-webmvc-ui
 	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0")
 }
-
+tasks.withType<JavaCompile> {
+	options.isDebug = true
+	options.debugOptions.debugLevel = "source,lines,vars"
+}
 tasks.withType<Test> {
 	useJUnitPlatform()  // Đảm bảo sử dụng JUnit Platform cho việc kiểm thử
 }
+

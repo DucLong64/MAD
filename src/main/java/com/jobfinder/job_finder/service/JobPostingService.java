@@ -8,10 +8,12 @@ import com.jobfinder.job_finder.repository.JobPostingRepository;
 import com.jobfinder.job_finder.repository.ShiftRepository;
 import com.jobfinder.job_finder.util.JobStatus;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.transaction.annotation.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -106,6 +108,42 @@ public class JobPostingService {
             JobPosting jobPosting = existingJob.get();
             jobPosting.setStatus(jobStatus);
             jobPostingRepository.save(jobPosting);
+        }
+    }
+    // Chuyển từ Open sang Work khi hết deadline
+    @Transactional
+    public void startWorkForJob(){
+        List<JobPosting> openJobs = jobPostingRepository.findByStatus(JobStatus.OPEN);
+        LocalDateTime now = LocalDateTime.now();
+        for(JobPosting jobPosting : openJobs) {
+            if (jobPosting.getDeadLine()!= null && now.isAfter(jobPosting.getDeadLine())) {
+                jobPosting.setStatus(JobStatus.WORKING);
+                jobPostingRepository.save(jobPosting);
+            }
+        }
+    }
+    // Chuyển trạng thái từ Working sang Close
+    @Transactional
+    public void closeWorkForJob(){
+        List<JobPosting> workJobs = jobPostingRepository.findByStatus(JobStatus.WORKING);
+        LocalDateTime now = LocalDateTime.now();
+        for(JobPosting jobPosting : workJobs) {
+            if (jobPosting.getShift().getEndTime()!= null && now.isAfter(jobPosting.getShift().getEndTime())) {
+                jobPosting.setStatus(JobStatus.CLOSE);
+                jobPostingRepository.save(jobPosting);
+            }
+        }
+    }
+    // Chuyen trang thai tu Pending sang Rejected neu qua han ma chua dc duyet
+    @Transactional
+    public void autoRejectJobPosting() {
+        List<JobPosting> pendingJobs = jobPostingRepository.findByStatus(JobStatus.PENDING);
+        LocalDateTime now = LocalDateTime.now();
+        for(JobPosting jobPosting : pendingJobs) {
+            if(jobPosting.getDeadLine()!= null && now.isAfter(jobPosting.getDeadLine())) {
+                jobPosting.setStatus(JobStatus.REJECTED);
+                jobPostingRepository.save(jobPosting);
+            }
         }
     }
     // Lấy tất cả các tin tuyển dụng của tất cả nhà tuyển dụng
