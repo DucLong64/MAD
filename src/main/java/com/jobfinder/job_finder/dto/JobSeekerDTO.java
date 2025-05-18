@@ -4,6 +4,7 @@ import com.jobfinder.job_finder.util.Role;
 import jakarta.persistence.ElementCollection;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.List;
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 public class JobSeekerDTO {
     private Long id;
     private String fullName;

@@ -1,11 +1,11 @@
 package com.jobfinder.job_finder.dto.response;
 
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class ShiftDTO {
     private Long id;
     private String name;

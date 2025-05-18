@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 public class ApplicationDTO {
     private Long idApplication;
     private JobSeekerDTO jobSeeker;
