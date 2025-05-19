@@ -1,6 +1,7 @@
 package com.jobfinder.job_finder.controller;
 
 import com.jobfinder.job_finder.dto.JobPostingDTO;
+import com.jobfinder.job_finder.dto.response.ApiResponse;
 import com.jobfinder.job_finder.dto.response.ShiftDTO;
 import com.jobfinder.job_finder.service.JobPostingService;
 import com.jobfinder.job_finder.service.ShiftService;
@@ -21,13 +22,15 @@ public class SeekerController {
     @Autowired
     private JobPostingService jobPostingService;
     @GetMapping("/schedule/{seekerId}")
-    public ResponseEntity<List<ShiftDTO>> getSchedule(@PathVariable Long seekerId) {
-        return ResponseEntity.ok(shiftService.getScheduleForSeeker(seekerId));
+    public ResponseEntity<ApiResponse<?>> getSchedule(@PathVariable Long seekerId) {
+        List<ShiftDTO> shitfs = shiftService.getScheduleForSeeker(seekerId);
+        return ResponseEntity.ok(new ApiResponse<>(200,"success",shitfs));
     }
     @GetMapping("/jobs/all")
-    public ResponseEntity<List<JobPostingDTO>> getJobPostings() {
+    public ResponseEntity<ApiResponse<List<JobPostingDTO>>> getJobPostings() {
         List<JobPostingDTO> jobPostings = jobPostingService.getAllOpenJobPostings();
-        return ResponseEntity.ok(jobPostings);
+        ApiResponse<List<JobPostingDTO>> apiResponse = new ApiResponse<>(200,"Success", jobPostings);
+        return ResponseEntity.ok(apiResponse);
     }
 
 }
